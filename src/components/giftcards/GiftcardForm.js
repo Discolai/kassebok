@@ -53,9 +53,8 @@ class GiftcardForm extends React.Component {
     // Do some validation
     console.log(form);
 
-
+    // Close modal
     this.onClose();
-
   }
 
   render () {
@@ -97,6 +96,12 @@ class GiftcardForm extends React.Component {
       </div>
     );
   }
+}
+
+GiftcardForm.propTypes = {
+  btnTxt: PropTypes.string.isRequired,
+  btnIcon: PropTypes.object.isRequired,
+  modalHdr: PropTypes.string.isRequired,
 }
 
 export default GiftcardForm;
