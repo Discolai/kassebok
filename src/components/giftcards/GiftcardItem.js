@@ -1,5 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import GiftcardForm from './GiftcardForm'
+
 
 class GiftCardItem extends React.Component {
   state = {
@@ -7,31 +9,32 @@ class GiftCardItem extends React.Component {
   }
 
   render () {
-    const {id, val, sold_on, sold_by, received_on, received_by} = this.props.giftcard;
+    const {card_number, val, sold_on, sold_by, received_on, received_by} = this.props.giftcard;
     return (
       <tr>
-        <th>{id}</th>
+        <th>{card_number}</th>
         <td>{val}</td>
         <td>{sold_on}</td>
         <td>{sold_by}</td>
         <td>{received_on}</td>
         <td>{received_by}</td>
         <td>
-          <button type="button" className="btn">
-            <i className="fa fa-cog" aria-hidden="true"></i>
-          </button>
+          <GiftcardForm
+           btnTxt=""
+           btnIcon={<i className="fa fa-cog" aria-hidden="true"></i>}
+           submitFnc={this.props.editFunc}
+           toEdit={this.props.giftcard}
+           modalHdr="Edit giftcard"
+          />
         </td>
       </tr>
     );
   }
-
-  // editGiftcard = (id) => {
-  //   this.setState({edit: !this.state.edit});
-  // }
 }
 
 GiftCardItem.propTypes = {
-  giftcard: PropTypes.object.isRequired
+  giftcard: PropTypes.object.isRequired,
+  editFunc: PropTypes.func.isRequired
 }
 
 export default GiftCardItem;

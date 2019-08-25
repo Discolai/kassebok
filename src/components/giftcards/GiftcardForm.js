@@ -8,13 +8,14 @@ class GiftcardForm extends React.Component {
   state = {
     open: false,
     id: '',
+    card_number: '',
     val: '',
     sold_on: '',
     sold_by: '',
     received_on: '',
     received_by: '',
     inputs: [
-      {label: 'Id', name: 'id', type: "number"},
+      {label: 'Card number', name: 'card_number', type: "number"},
       {label: 'Value', name: 'val', type: "number"},
       {label: 'Sold on', name: 'sold_on', type: "date"},
       {label: 'Sold by', name: 'sold_by', type: "text"},
@@ -25,6 +26,11 @@ class GiftcardForm extends React.Component {
 
 
   onOpen = () => {
+    if ('toEdit' in this.props) {
+      for (var key in this.props.toEdit) {
+        this.setState({[key]: this.props.toEdit[key]});
+      }
+    }
     this.setState({open: true});
   }
 
@@ -50,8 +56,9 @@ class GiftcardForm extends React.Component {
     delete form.open;
     delete form.inputs;
 
-    // Do some validation
-    console.log(form);
+    // TODO => Do some validation
+
+    this.props.submitFnc(form);
 
     // Close modal
     this.onClose();
@@ -101,6 +108,7 @@ class GiftcardForm extends React.Component {
 GiftcardForm.propTypes = {
   btnTxt: PropTypes.string.isRequired,
   btnIcon: PropTypes.object.isRequired,
+  submitFnc: PropTypes.func.isRequired,
   modalHdr: PropTypes.string.isRequired,
 }
 
