@@ -85,7 +85,7 @@ class GiftCards extends React.Component {
           <thead>
             <tr>
               <th>Card Number</th>
-              <th>valueue</th>
+              <th>Value</th>
               <th>Sold on</th>
               <th>Sold by</th>
               <th>Received on</th>
