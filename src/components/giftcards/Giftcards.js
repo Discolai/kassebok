@@ -40,21 +40,29 @@ class GiftCards extends React.Component {
 
 
   addGiftcard = (giftcard) => {
-    const giftcards = [...this.state.giftcards];
-    giftcards.push(giftcard);
 
-    this.setState({giftcards: giftcards});
+    axios.post('http://localhost:8080/api/giftcards', giftcard)
+    .then((response) => {
+      const giftcards = [...this.state.giftcards];
+      giftcards.push(giftcard);
+      this.setState({giftcards: giftcards});
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+
   }
 
   editGiftcard = (giftcard) => {
-    const giftcards = [...this.state.giftcards];
-    for (var i = 0; i < giftcards.length; i++) {
-      if (giftcards[i].id === giftcard.id) {
-        giftcards[i] = giftcard;
-        break;
-      }
-    }
-    this.setState({giftcards: giftcards})
+    const giftcards = [...this.state.giftcards].map(g => g = g.id === giftcard.id ? giftcard : g);
+
+    axios.put(`http://localhost:8080/api/giftcards/${giftcard.id}`, giftcard)
+    .then((response) => {
+      this.setState({giftcards: giftcards});
+    })
+    .catch((error) => {
+      console.log(error);
+    });
   }
 
   componentDidMount() {

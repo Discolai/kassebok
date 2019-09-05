@@ -7,7 +7,6 @@ class GiftcardForm extends React.Component {
 
   state = {
     open: false,
-    id: '',
     card_id: '',
     value: '',
     sold_on: '',
