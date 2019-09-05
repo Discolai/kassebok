@@ -9,11 +9,11 @@ class GiftCardItem extends React.Component {
   }
 
   render () {
-    const {card_id, val, sold_on, sold_by, received_on, received_by} = this.props.giftcard;
+    const {card_id, value, sold_on, sold_by, received_on, received_by} = this.props.giftcard;
     return (
       <tr>
         <th>{card_id}</th>
-        <td>{val}</td>
+        <td>{value}</td>
         <td>{sold_on}</td>
         <td>{sold_by}</td>
         <td>{received_on}</td>

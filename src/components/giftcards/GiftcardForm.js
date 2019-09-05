@@ -9,14 +9,14 @@ class GiftcardForm extends React.Component {
     open: false,
     id: '',
     card_id: '',
-    val: '',
+    value: '',
     sold_on: '',
     sold_by: '',
     received_on: '',
     received_by: '',
     inputs: [
       {label: 'Card number', name: 'card_id', type: "number"},
-      {label: 'Value', name: 'val', type: "number"},
+      {label: 'Value', name: 'value', type: "number"},
       {label: 'Sold on', name: 'sold_on', type: "date"},
       {label: 'Sold by', name: 'sold_by', type: "text"},
       {label: 'Received on', name: 'received_on', type: "date"},
@@ -28,7 +28,9 @@ class GiftcardForm extends React.Component {
   onOpen = () => {
     if ('toEdit' in this.props) {
       for (var key in this.props.toEdit) {
-        this.setState({[key]: this.props.toEdit[key]});
+        if (this.props.toEdit[key]) {
+          this.setState({[key]: this.props.toEdit[key]});
+        }
       }
     }
     this.setState({open: true});
