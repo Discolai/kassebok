@@ -79,6 +79,9 @@ class Giftcard {
   }
 };
 
+router.options('/', cors());
+router.options('/:id', cors());
+
 router.get('/', cors(), Giftcard.getAllGiftcards);
 router.get('/:id', cors(), Giftcard.getSingleGiftcard);
 
