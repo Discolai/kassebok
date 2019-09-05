@@ -2,20 +2,22 @@ const db = require('../db.js');
 const mysql = require('mysql');
 
 const express = require('express');
-const router = express.Router();
+const cors = require('cors');
 
+const router = express.Router();
 
 class Giftcard {
   static insertGiftcard(req, res) {
-    const { card_id, val, sold_on, sold_by, received_on, received_by} = req.body;
+    const { card_id, value, sold_on, sold_by, received_on, received_by} = req.body;
     db.query(
       `INSERT INTO giftcards VALUES (?, ?, ?, ?, ?, ?);`,
-      [card_id, val, sold_on, sold_by, received_on, received_by],
+      [card_id, value, sold_on, sold_by, received_on, received_by],
       (error, results, fields) => {
         if (error) {
           res.status(500).send({error: error.code});
+        } else {
+          res.status(results.affectedRows > 0 ? 204 : 400).send();
         }
-        res.status(results.affectedRows > 0 ? 204 : 400).send();
     });
   }
 
@@ -25,10 +27,11 @@ class Giftcard {
       (error, results, fields) => {
         if (error) {
           res.status(500).send({error: error.code});
-        }
+        } else {
 
-        res.status(results.affectedRows > 0 ? 200 : 404);
-        res.json({res: results}).send();
+          res.status(results.length > 0 ? 200 : 404);
+          res.send({res: results});
+        }
     });
   }
 
@@ -39,10 +42,10 @@ class Giftcard {
       (error, results, fields) => {
         if (error) {
           res.status(500).send({error: error.code});
+        } else {
+          res.status(results.length > 0 ? 200 : 404);
+          res.send({res: results});
         }
-
-        res.status(results.length > 0 ? 200 : 404);
-        res.json({res: results}).send();
     });
   }
 
@@ -53,8 +56,9 @@ class Giftcard {
       (error, results, fields) => {
         if (error) {
           res.status(500).send({error: error.code});
+        } else {
+          res.status(results.affectedRows > 0 ? 204 : 404).send();
         }
-        res.status(results.affectedRows > 0 ? 204 : 404).send();
     });
   }
 
@@ -68,18 +72,19 @@ class Giftcard {
       (error, results, fields) => {
         if (error) {
           res.status(500).send({error: error.code});
+        } else {
+          res.status(results.affectedRows > 0 ? 204 : 404).send();
         }
-        res.status(results.affectedRows > 0 ? 204 : 404).send();
     });
   }
 };
 
-router.get('/', Giftcard.getAllGiftcards);
-router.get('/:id', Giftcard.getSingleGiftcard);
+router.get('/', cors(), Giftcard.getAllGiftcards);
+router.get('/:id', cors(), Giftcard.getSingleGiftcard);
 
-router.post('/', Giftcard.insertGiftcard);
-router.delete('/:id', Giftcard.deleteGiftcard);
-router.put('/:id', Giftcard.updateGiftcard);
+router.post('/', cors(), Giftcard.insertGiftcard);
+router.delete('/:id', cors(), Giftcard.deleteGiftcard);
+router.put('/:id', cors(), Giftcard.updateGiftcard);
 
 
 module.exports = router;
