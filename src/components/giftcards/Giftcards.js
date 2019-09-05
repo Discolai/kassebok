@@ -5,36 +5,37 @@ import GiftcardForm from './GiftcardForm';
 
 class GiftCards extends React.Component {
   state = {
-    giftcards: [
-      {
-        id: 0,
-        card_number: 0,
-        val: 500,
-        sold_on: '2019-01-19',
-        sold_by: 'Nikolai',
-        received_on: '2019-06-23',
-        received_by: 'Nikolai'
-      },
-      {
-        id: 1,
-        card_number: 1,
-        val: 900,
-        sold_on: '',
-        sold_by: 'Nikolai',
-        received_on: '',
-        received_by: 'Nikolai'
-      },
-      {
-        id: 2,
-        card_number: 2,
-        val: 300,
-        sold_on: '',
-        sold_by: 'Nikolai',
-        received_on: '',
-        received_by: 'Nikolai'
-      }
-    ]
+    // giftcards: [
+    //   {
+    //     id: 0,
+    //     card_id: 0,
+    //     val: 500,
+    //     sold_on: '2019-01-19',
+    //     sold_by: 'Nikolai',
+    //     received_on: '2019-06-23',
+    //     received_by: 'Nikolai'
+    //   },
+    //   {
+    //     id: 1,
+    //     card_id: 1,
+    //     val: 900,
+    //     sold_on: '',
+    //     sold_by: 'Nikolai',
+    //     received_on: '',
+    //     received_by: 'Nikolai'
+    //   },
+    //   {
+    //     id: 2,
+    //     card_id: 2,
+    //     val: 300,
+    //     sold_on: '',
+    //     sold_by: 'Nikolai',
+    //     received_on: '',
+    //     received_by: 'Nikolai'
+    //   }
+    // ]
   }
+
 
   addGiftcard = (giftcard) => {
     const giftcards = [...this.state.giftcards];
@@ -51,9 +52,11 @@ class GiftCards extends React.Component {
         break;
       }
     }
-
-
     this.setState({giftcards: giftcards})
+  }
+
+  componentDidMount() {
+
   }
 
   render() {

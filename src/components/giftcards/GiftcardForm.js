@@ -8,14 +8,14 @@ class GiftcardForm extends React.Component {
   state = {
     open: false,
     id: '',
-    card_number: '',
+    card_id: '',
     val: '',
     sold_on: '',
     sold_by: '',
     received_on: '',
     received_by: '',
     inputs: [
-      {label: 'Card number', name: 'card_number', type: "number"},
+      {label: 'Card number', name: 'card_id', type: "number"},
       {label: 'Value', name: 'val', type: "number"},
       {label: 'Sold on', name: 'sold_on', type: "date"},
       {label: 'Sold by', name: 'sold_by', type: "text"},
