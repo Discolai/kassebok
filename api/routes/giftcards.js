@@ -2,16 +2,10 @@ const db = require('../db.js');
 const mysql = require('mysql');
 
 const express = require('express');
-const router = express.router();
+const router = express.Router();
 
-router.get('/', Giftcard.getAllGiftcards);
-router.get('/:id', Giftcard.getSingleGiftcard);
 
-router.post('/', Giftcard.insertGiftcard);
-router.delete('/:id', Giftcard.deleteGiftcard);
-router.put('/:id', Giftcard.updateGiftcard);
-
-class GiftCard {
+class Giftcard {
   static insertGiftcard(req, res) {
     const { card_id, val, sold_on, sold_by, received_on, received_by} = req.body;
     db.query(
@@ -79,5 +73,13 @@ class GiftCard {
     });
   }
 };
+
+router.get('/', Giftcard.getAllGiftcards);
+router.get('/:id', Giftcard.getSingleGiftcard);
+
+router.post('/', Giftcard.insertGiftcard);
+router.delete('/:id', Giftcard.deleteGiftcard);
+router.put('/:id', Giftcard.updateGiftcard);
+
 
 module.exports = router;
