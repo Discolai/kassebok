@@ -69,7 +69,7 @@ class GiftCards extends React.Component {
           <tbody>
             {
               this.state.giftcards.map((giftcard) => (
-                <GiftCardItem key={giftcard.card_id} giftcard={giftcard} editFunc={this.editGiftcard}/>
+                <GiftCardItem key={giftcard.id} giftcard={giftcard} editFunc={this.editGiftcard}/>
               ))
             }
           </tbody>
