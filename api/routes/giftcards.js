@@ -10,7 +10,9 @@ class Giftcard {
   static insertGiftcard(req, res) {
     const { card_id, value, sold_on, sold_by, received_on, received_by} = req.body;
     db.query(
-      `INSERT INTO giftcards VALUES (?, ?, ?, ?, ?, ?);`,
+      `INSERT INTO giftcards
+      (card_id, value, sold_on, sold_by, received_on, received_by)
+      VALUES (?, ?, ?, ?, ?, ?);`,
       [card_id, value, sold_on, sold_by, received_on || null, received_by || null],
       (error, results, fields) => {
         if (error) {
@@ -37,7 +39,7 @@ class Giftcard {
 
   static getSingleGiftcard(req, res)  {
     db.query(
-      `SELECT * FROM giftcards WHERE card_id = ?;`,
+      `SELECT * FROM giftcards WHERE id = ?;`,
       [req.params.id],
       (error, results, fields) => {
         if (error) {
@@ -51,7 +53,7 @@ class Giftcard {
 
   static deleteGiftcard(req, res) {
     db.query(
-      `DELETE FROM giftcards WHERE card_id = ?;`,
+      `DELETE FROM giftcards WHERE id = ?;`,
       [req.params.id],
       (error, results, fields) => {
         if (error) {
@@ -63,12 +65,12 @@ class Giftcard {
   }
 
   static updateGiftcard(req, res) {
-    const { card_id, val, sold_on, sold_by, received_on, received_by} = req.body;
+    const { card_id, value, sold_on, sold_by, received_on, received_by} = req.body;
     db.query(
       `UPDATE giftcards
       SET card_id=?, value=?, sold_on=?, sold_by=?, received_on=?, received_by=?
-      WHERE card_id = ?;`,
-      [card_id, val, sold_on, sold_by, received_on || null, received_by || null, req.params.id],
+      WHERE id = ?;`,
+      [card_id, value, sold_on, sold_by, received_on || null, received_by || null, req.params.id],
       (error, results, fields) => {
         if (error) {
           res.status(500).send({error: error.code});
