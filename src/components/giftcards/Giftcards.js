@@ -1,39 +1,41 @@
 import React from 'react';
 import GiftCardItem from './GiftcardItem';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import GiftcardForm from './GiftcardForm';
+import axios from 'axios';
+
 
 class GiftCards extends React.Component {
   state = {
-    // giftcards: [
-    //   {
-    //     id: 0,
-    //     card_id: 0,
-    //     val: 500,
-    //     sold_on: '2019-01-19',
-    //     sold_by: 'Nikolai',
-    //     received_on: '2019-06-23',
-    //     received_by: 'Nikolai'
-    //   },
-    //   {
-    //     id: 1,
-    //     card_id: 1,
-    //     val: 900,
-    //     sold_on: '',
-    //     sold_by: 'Nikolai',
-    //     received_on: '',
-    //     received_by: 'Nikolai'
-    //   },
-    //   {
-    //     id: 2,
-    //     card_id: 2,
-    //     val: 300,
-    //     sold_on: '',
-    //     sold_by: 'Nikolai',
-    //     received_on: '',
-    //     received_by: 'Nikolai'
-    //   }
-    // ]
+    giftcards: [
+      // {
+      //   id: 0,
+      //   card_id: 0,
+      //   value: 500,
+      //   sold_on: '2019-01-19',
+      //   sold_by: 'Nikolai',
+      //   received_on: '2019-06-23',
+      //   received_by: 'Nikolai'
+      // },
+      // {
+      //   id: 1,
+      //   card_id: 1,
+      //   value: 900,
+      //   sold_on: '',
+      //   sold_by: 'Nikolai',
+      //   received_on: '',
+      //   received_by: 'Nikolai'
+      // },
+      // {
+      //   id: 2,
+      //   card_id: 2,
+      //   value: 300,
+      //   sold_on: '',
+      //   sold_by: 'Nikolai',
+      //   received_on: '',
+      //   received_by: 'Nikolai'
+      // }
+    ]
   }
 
 
@@ -56,7 +58,10 @@ class GiftCards extends React.Component {
   }
 
   componentDidMount() {
-
+    axios.get('http://localhost:8080/api/giftcards').then((response) => {
+      // console.log(response);
+      this.setState({giftcards: response.data.res});
+    });
   }
 
   render() {
@@ -72,7 +77,7 @@ class GiftCards extends React.Component {
           <thead>
             <tr>
               <th>Card Number</th>
-              <th>Value</th>
+              <th>valueue</th>
               <th>Sold on</th>
               <th>Sold by</th>
               <th>Received on</th>
@@ -83,7 +88,7 @@ class GiftCards extends React.Component {
           <tbody>
             {
               this.state.giftcards.map((giftcard) => (
-                <GiftCardItem key={giftcard.id} giftcard={giftcard} editFunc={this.editGiftcard}/>
+                <GiftCardItem key={giftcard.card_id} giftcard={giftcard} editFunc={this.editGiftcard}/>
               ))
             }
           </tbody>
