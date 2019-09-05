@@ -11,7 +11,7 @@ class Giftcard {
     const { card_id, value, sold_on, sold_by, received_on, received_by} = req.body;
     db.query(
       `INSERT INTO giftcards VALUES (?, ?, ?, ?, ?, ?);`,
-      [card_id, value, sold_on, sold_by, received_on, received_by],
+      [card_id, value, sold_on, sold_by, received_on || null, received_by || null],
       (error, results, fields) => {
         if (error) {
           res.status(500).send({error: error.code});
@@ -68,7 +68,7 @@ class Giftcard {
       `UPDATE giftcards
       SET card_id=?, value=?, sold_on=?, sold_by=?, received_on=?, received_by=?
       WHERE card_id = ?;`,
-      [card_id, val, sold_on, sold_by, received_on, received_by, req.params.id],
+      [card_id, val, sold_on, sold_by, received_on || null, received_by || null, req.params.id],
       (error, results, fields) => {
         if (error) {
           res.status(500).send({error: error.code});
