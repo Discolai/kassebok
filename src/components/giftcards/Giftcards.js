@@ -8,33 +8,6 @@ import axios from 'axios';
 class GiftCards extends React.Component {
   state = {
     giftcards: [
-      // {
-      //   id: 0,
-      //   card_id: 0,
-      //   value: 500,
-      //   sold_on: '2019-01-19',
-      //   sold_by: 'Nikolai',
-      //   received_on: '2019-06-23',
-      //   received_by: 'Nikolai'
-      // },
-      // {
-      //   id: 1,
-      //   card_id: 1,
-      //   value: 900,
-      //   sold_on: '',
-      //   sold_by: 'Nikolai',
-      //   received_on: '',
-      //   received_by: 'Nikolai'
-      // },
-      // {
-      //   id: 2,
-      //   card_id: 2,
-      //   value: 300,
-      //   sold_on: '',
-      //   sold_by: 'Nikolai',
-      //   received_on: '',
-      //   received_by: 'Nikolai'
-      // }
     ]
   }
 
