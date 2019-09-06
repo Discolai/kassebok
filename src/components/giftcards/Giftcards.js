@@ -12,11 +12,12 @@ class GiftCards extends React.Component {
   }
 
 
-  addGiftcard = (giftcard) => {
+  handleAdd = (giftcard) => {
 
     axios.post('http://localhost:8080/api/giftcards', giftcard)
     .then((response) => {
       const giftcards = [...this.state.giftcards];
+      giftcard.id = response.data.insertId;
       giftcards.push(giftcard);
       this.setState({giftcards: giftcards});
     })
@@ -26,7 +27,7 @@ class GiftCards extends React.Component {
 
   }
 
-  editGiftcard = (giftcard) => {
+  handleEdit = (giftcard) => {
     const giftcards = [...this.state.giftcards].map(g => g = g.id === giftcard.id ? giftcard : g);
 
     axios.put(`http://localhost:8080/api/giftcards/${giftcard.id}`, giftcard)
@@ -51,7 +52,7 @@ class GiftCards extends React.Component {
         <GiftcardForm
          btnTxt="Add a new giftcard"
          btnIcon={<i className="fa fa-plus-square" aria-hidden="true"></i>}
-         submitFnc={this.addGiftcard}
+         onSubmit={this.handleAdd}
          modalHdr="Create new giftcard"
         />
         <table className="table">
@@ -69,7 +70,7 @@ class GiftCards extends React.Component {
           <tbody>
             {
               this.state.giftcards.map((giftcard) => (
-                <GiftCardItem key={giftcard.id} giftcard={giftcard} editFunc={this.editGiftcard}/>
+                <GiftCardItem key={giftcard.id} giftcard={giftcard} onEdit={this.handleEdit}/>
               ))
             }
           </tbody>

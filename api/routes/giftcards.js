@@ -8,17 +8,18 @@ const router = express.Router();
 
 class Giftcard {
   static insertGiftcard(req, res) {
-    const { card_id, value, sold_on, sold_by, received_on, received_by} = req.body;
+    const { cardId, value, soldOn, soldBy, receivedOn, receivedBy} = req.body;
     db.query(
       `INSERT INTO giftcards
-      (card_id, value, sold_on, sold_by, received_on, received_by)
+      (cardId, value, soldOn, soldBy, receivedOn, receivedBy)
       VALUES (?, ?, ?, ?, ?, ?);`,
-      [card_id, value, sold_on, sold_by, received_on || null, received_by || null],
+      [cardId, value, soldOn, soldBy, receivedOn || null, receivedBy || null],
       (error, results, fields) => {
         if (error) {
           res.status(500).send({error: error.code});
         } else {
-          res.status(results.affectedRows > 0 ? 204 : 400).send();
+          res.status(results.affectedRows > 0 ? 200 : 400)
+          .send({insertId: results.insertId});
         }
     });
   }
@@ -65,12 +66,12 @@ class Giftcard {
   }
 
   static updateGiftcard(req, res) {
-    const { card_id, value, sold_on, sold_by, received_on, received_by} = req.body;
+    const { cardId, value, soldOn, soldBy, receivedOn, receivedBy} = req.body;
     db.query(
       `UPDATE giftcards
-      SET card_id=?, value=?, sold_on=?, sold_by=?, received_on=?, received_by=?
+      SET cardId=?, value=?, soldOn=?, soldBy=?, receivedOn=?, receivedBy=?
       WHERE id = ?;`,
-      [card_id, value, sold_on, sold_by, received_on || null, received_by || null, req.params.id],
+      [cardId, value, soldOn, soldBy, receivedOn || null, receivedBy || null, req.params.id],
       (error, results, fields) => {
         if (error) {
           res.status(500).send({error: error.code});

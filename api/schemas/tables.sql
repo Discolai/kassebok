@@ -4,12 +4,12 @@ USE kassebok;
 
 CREATE TABLE IF NOT EXISTS giftcards (
   id INT(6) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  card_id INT(6) UNSIGNED NOT NULL UNIQUE,
+  cardId INT(6) UNSIGNED NOT NULL UNIQUE,
   value INT(6) UNSIGNED NOT NULL,
-  sold_on DATE NOT NULL,
-  sold_by VARCHAR(30) NOT NULL,
-  received_on DATE,
-  received_by VARCHAR(30)
+  soldOn DATE NOT NULL,
+  soldBy VARCHAR(30) NOT NULL,
+  receivedOn DATE,
+  receivedBy VARCHAR(30)
 );
 
 CREATE TABLE IF NOT EXISTS posts  (

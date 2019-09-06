@@ -9,20 +9,20 @@ class GiftCardItem extends React.Component {
   }
 
   render () {
-    const {card_id, value, sold_on, sold_by, received_on, received_by} = this.props.giftcard;
+    const {cardId, value, soldOn, soldBy, receivedOn, receivedBy} = this.props.giftcard;
     return (
       <tr>
-        <th>{card_id}</th>
+        <th>{cardId}</th>
         <td>{value}</td>
-        <td>{sold_on}</td>
-        <td>{sold_by}</td>
-        <td>{received_on}</td>
-        <td>{received_by}</td>
+        <td>{soldOn}</td>
+        <td>{soldBy}</td>
+        <td>{receivedOn}</td>
+        <td>{receivedBy}</td>
         <td>
           <GiftcardForm
            btnTxt=""
            btnIcon={<i className="fa fa-cog" aria-hidden="true"></i>}
-           submitFnc={this.props.editFunc}
+           onSubmit={this.props.onEdit}
            toEdit={this.props.giftcard}
            modalHdr="Edit giftcard"
           />
@@ -34,7 +34,7 @@ class GiftCardItem extends React.Component {
 
 GiftCardItem.propTypes = {
   giftcard: PropTypes.object.isRequired,
-  editFunc: PropTypes.func.isRequired
+  onEdit: PropTypes.func.isRequired
 }
 
 export default GiftCardItem;

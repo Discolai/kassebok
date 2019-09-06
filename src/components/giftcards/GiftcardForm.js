@@ -7,19 +7,19 @@ class GiftcardForm extends React.Component {
 
   state = {
     open: false,
-    card_id: '',
+    cardId: '',
     value: '',
-    sold_on: '',
-    sold_by: '',
-    received_on: '',
-    received_by: '',
+    soldOn: '',
+    soldBy: '',
+    receivedOn: '',
+    receivedBy: '',
     inputs: [
-      {label: 'Card number', name: 'card_id', type: "number"},
+      {label: 'Card number', name: 'cardId', type: "number"},
       {label: 'Value', name: 'value', type: "number"},
-      {label: 'Sold on', name: 'sold_on', type: "date"},
-      {label: 'Sold by', name: 'sold_by', type: "text"},
-      {label: 'Received on', name: 'received_on', type: "date"},
-      {label: 'Received by', name: 'received_by', type: "text"},
+      {label: 'Sold on', name: 'soldOn', type: "date"},
+      {label: 'Sold by', name: 'soldBy', type: "text"},
+      {label: 'Received on', name: 'receivedOn', type: "date"},
+      {label: 'Received by', name: 'receivedBy', type: "text"},
     ]
   }
 
@@ -42,6 +42,9 @@ class GiftcardForm extends React.Component {
       if (k === 'inputs') continue;
       this.setState({[k]: k === 'open' ? false : ''});
     }
+    // this.state.inputs.map((x) => {
+      // this.setState([x.name]: '');
+    // });
   }
 
   onChange = (e) => {
@@ -59,7 +62,8 @@ class GiftcardForm extends React.Component {
 
     // TODO => Do some validation
 
-    this.props.submitFnc(form);
+
+    this.props.onSubmit(form);
 
     // Close modal
     this.onClose();
@@ -109,7 +113,7 @@ class GiftcardForm extends React.Component {
 GiftcardForm.propTypes = {
   btnTxt: PropTypes.string.isRequired,
   btnIcon: PropTypes.object.isRequired,
-  submitFnc: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
   modalHdr: PropTypes.string.isRequired,
 }
 
