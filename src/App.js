@@ -1,4 +1,5 @@
 import React from 'react';
+import { Route, BrowserRouter as Router } from 'react-router-dom'
 import GiftCards from './components/giftcards/giftcards';
 import NavBar from './components/navbar';
 
@@ -10,12 +11,12 @@ class App extends React.Component {
 
   render() {
     return (
-      <React.Fragment>
+      <Router>
         <NavBar/>
         <div className="container">
-          <GiftCards/>
+            <Route path='/giftcards' component={GiftCards}/>
         </div>
-      </React.Fragment>
+      </Router>
     );
   }
 }
