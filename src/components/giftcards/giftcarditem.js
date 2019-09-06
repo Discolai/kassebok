@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import GiftcardForm from './GiftcardForm'
+import GiftCardForm from './giftcardform'
 
 
 class GiftCardItem extends React.Component {
@@ -19,7 +19,7 @@ class GiftCardItem extends React.Component {
         <td>{receivedOn}</td>
         <td>{receivedBy}</td>
         <td>
-          <GiftcardForm
+          <GiftCardForm
            btnTxt=""
            btnIcon={<i className="fa fa-cog" aria-hidden="true"></i>}
            onSubmit={this.props.onEdit}

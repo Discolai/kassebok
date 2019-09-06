@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Modal from 'react-responsive-modal';
 
 
-class GiftcardForm extends React.Component {
+class GiftCardForm extends React.Component {
 
   state = {
     open: false,
@@ -110,11 +110,11 @@ class GiftcardForm extends React.Component {
   }
 }
 
-GiftcardForm.propTypes = {
+GiftCardForm.propTypes = {
   btnTxt: PropTypes.string.isRequired,
   btnIcon: PropTypes.object.isRequired,
   onSubmit: PropTypes.func.isRequired,
   modalHdr: PropTypes.string.isRequired,
 }
 
-export default GiftcardForm;
+export default GiftCardForm;

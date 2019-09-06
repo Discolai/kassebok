@@ -1,7 +1,7 @@
 import React from 'react';
-import GiftCardItem from './GiftcardItem';
+import GiftCardItem from './giftcarditem';
 import PropTypes from 'prop-types';
-import GiftcardForm from './GiftcardForm';
+import GiftcardForm from './giftcardform';
 import axios from 'axios';
 
 
