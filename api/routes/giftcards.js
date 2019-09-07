@@ -26,7 +26,7 @@ class Giftcard {
 
   static getAllGiftcards(req, res) {
     db.query(
-      `SELECT * FROM giftcards;`,
+      `SELECT * FROM giftcards ORDER BY cardId;`,
       (error, results, fields) => {
         if (error) {
           res.status(500).send({error: error.code});
