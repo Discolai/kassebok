@@ -27,9 +27,7 @@ class GiftCardForm extends React.Component {
   onOpen = () => {
     if ('toEdit' in this.props) {
       for (var key in this.props.toEdit) {
-        if (this.props.toEdit[key]) {
-          this.setState({[key]: this.props.toEdit[key]});
-        }
+        this.setState({[key]: this.props.toEdit[key] || ""});
       }
     }
     this.setState({open: true});
@@ -38,13 +36,7 @@ class GiftCardForm extends React.Component {
   onClose = () => {
     // Reset all form fields and close modal
     this.setState({open: false});
-    for (let k in this.state) {
-      if (k === 'inputs') continue;
-      this.setState({[k]: k === 'open' ? false : ''});
-    }
-    // this.state.inputs.map((x) => {
-      // this.setState([x.name]: '');
-    // });
+    this.state.inputs.map((x) => this.setState([x.name]: ''));
   }
 
   onChange = (e) => {
