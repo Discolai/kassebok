@@ -14,12 +14,12 @@ class GiftCardForm extends React.Component {
     receivedOn: '',
     receivedBy: '',
     inputs: [
-      {label: 'Card number', name: 'cardId', type: "number"},
-      {label: 'Value', name: 'value', type: "number"},
-      {label: 'Sold on', name: 'soldOn', type: "date"},
-      {label: 'Sold by', name: 'soldBy', type: "text"},
-      {label: 'Received on', name: 'receivedOn', type: "date"},
-      {label: 'Received by', name: 'receivedBy', type: "text"},
+      {label: 'Card number', name: 'cardId', type: "number", isRequired: true},
+      {label: 'Value', name: 'value', type: "number", isRequired: true},
+      {label: 'Sold on', name: 'soldOn', type: "date", isRequired: true},
+      {label: 'Sold by', name: 'soldBy', type: "text", isRequired: true},
+      {label: 'Received on', name: 'receivedOn', type: "date", isRequired: false},
+      {label: 'Received by', name: 'receivedBy', type: "text", isRequired: false},
     ]
   }
 
@@ -74,6 +74,7 @@ class GiftCardForm extends React.Component {
            value={this.state[input.name]}
            name={input.name}
            onChange={this.onChange}
+           required={input.isRequired}
           />
         </div>
       );
