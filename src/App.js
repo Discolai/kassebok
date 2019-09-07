@@ -1,21 +1,29 @@
 import React from 'react';
-import { Route, BrowserRouter as Router } from 'react-router-dom'
-import GiftCards from './components/giftcards/giftcards';
-import NavBar from './components/navbar';
-
+import { Route, Switch, BrowserRouter as Router } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.css';
 import '../node_modules/font-awesome/css/font-awesome.min.css';
 
+import GiftCards from './components/giftcards/giftcards';
+import Posts from './components/posts/posts';
+import Tasks from './components/tasks/tasks';
+
+const notFound = () =>  {
+  return (
+    <h2>404 Not found!</h2>
+  );
+};
+
 class App extends React.Component {
-
-
   render() {
     return (
       <Router>
-        <NavBar/>
-        <div className="container">
-            <Route path='/giftcards' component={GiftCards}/>
-        </div>
+          <Switch>
+            <Route exact path="/giftcards" component={GiftCards}/>
+            <Route exact path="/posts" component={Posts}/>
+            <Route exact path="/tasks" component={Tasks}/>
+
+            <Route component={notFound}/>
+          </Switch>
       </Router>
     );
   }
