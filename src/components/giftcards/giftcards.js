@@ -1,8 +1,10 @@
 import React from 'react';
+import axios from 'axios';
+
+import NavBar from '../navbar';
 import GiftCardItem from './giftcarditem';
 import PropTypes from 'prop-types';
 import GiftcardForm from './giftcardform';
-import axios from 'axios';
 
 
 class GiftCards extends React.Component {
@@ -49,48 +51,51 @@ class GiftCards extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <div className="row mt-2">
-          <div className="col-l-2 col-sm-4 col-xs-12">
-            <h2>Giftcards</h2>
+        <NavBar/>
+        <div className="container">
+          <div className="row mt-2">
+            <div className="col-l-2 col-sm-4 col-xs-12">
+              <h2>Giftcards</h2>
+            </div>
+            <div className="col-l-2 col-sm-2 col-xs-2">
+              <button className="btn">
+                Export{" "}
+                <i className="fa fa-file-pdf-o" aria-hidden="true"></i>
+              </button>
+            </div>
+            <div className="col-l-2 col-sm-4 col-xs-2">
+              <GiftcardForm
+                btnTxt="New giftcard"
+                btnIcon={<i className="fa fa-plus-square" aria-hidden="true"></i>}
+                onSubmit={this.handleAdd}
+                modalHdr="Create new giftcard"
+                />
+            </div>
+            <div className="col-l-2 col-sm-4 col-xs-2">
+            </div>
           </div>
-          <div className="col-l-2 col-sm-2 col-xs-2">
-            <button className="btn">
-              Export{" "}
-              <i className="fa fa-file-pdf-o" aria-hidden="true"></i>
-            </button>
-          </div>
-          <div className="col-l-2 col-sm-4 col-xs-2">
-            <GiftcardForm
-              btnTxt="New giftcard"
-              btnIcon={<i className="fa fa-plus-square" aria-hidden="true"></i>}
-              onSubmit={this.handleAdd}
-              modalHdr="Create new giftcard"
-              />
-          </div>
-          <div className="col-l-2 col-sm-4 col-xs-2">
-          </div>
+          <table className="table table-striped table-bordered">
+            <thead className="thead-dark">
+              <tr>
+                <th>Card id</th>
+                <th>Value</th>
+                <th>Sold on</th>
+                <th>Sold by</th>
+                <th>Received on</th>
+                <th>Received by</th>
+                <th>Edit</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                this.state.giftcards.map((giftcard) => (
+                  <GiftCardItem key={giftcard.id} giftcard={giftcard} onEdit={this.handleEdit}/>
+                ))
+              }
+            </tbody>
+          </table>
+          { this.state.giftcards.length === 0 ? <p>No giftcards available!</p> : "" }
         </div>
-        <table className="table table-striped table-bordered">
-          <thead className="thead-dark">
-            <tr>
-              <th>Card id</th>
-              <th>Value</th>
-              <th>Sold on</th>
-              <th>Sold by</th>
-              <th>Received on</th>
-              <th>Received by</th>
-              <th>Edit</th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              this.state.giftcards.map((giftcard) => (
-                <GiftCardItem key={giftcard.id} giftcard={giftcard} onEdit={this.handleEdit}/>
-              ))
-            }
-          </tbody>
-        </table>
-        { this.state.giftcards.length === 0 ? <p>No giftcards available!</p> : "" }
       </React.Fragment>
     );
   }
