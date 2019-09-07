@@ -48,14 +48,29 @@ class GiftCards extends React.Component {
 
   render() {
     return (
-      <div>
-        <GiftcardForm
-         btnTxt="Add a new giftcard"
-         btnIcon={<i className="fa fa-plus-square" aria-hidden="true"></i>}
-         onSubmit={this.handleAdd}
-         modalHdr="Create new giftcard"
-        />
-      <table className="table table-striped table-bordered">
+      <React.Fragment>
+        <div className="row mt-2">
+          <div className="col-l-2 col-sm-4 col-xs-12">
+            <h2>Giftcards</h2>
+          </div>
+          <div className="col-l-2 col-sm-2 col-xs-2">
+            <button className="btn">
+              Export{" "}
+              <i className="fa fa-file-pdf-o" aria-hidden="true"></i>
+            </button>
+          </div>
+          <div className="col-l-2 col-sm-4 col-xs-2">
+            <GiftcardForm
+              btnTxt="New giftcard"
+              btnIcon={<i className="fa fa-plus-square" aria-hidden="true"></i>}
+              onSubmit={this.handleAdd}
+              modalHdr="Create new giftcard"
+              />
+          </div>
+          <div className="col-l-2 col-sm-4 col-xs-2">
+          </div>
+        </div>
+        <table className="table table-striped table-bordered">
           <thead className="thead-dark">
             <tr>
               <th>Card id</th>
@@ -75,7 +90,8 @@ class GiftCards extends React.Component {
             }
           </tbody>
         </table>
-      </div>
+        { this.state.giftcards.length === 0 ? <p>No giftcards available!</p> : "" }
+      </React.Fragment>
     );
   }
 }
