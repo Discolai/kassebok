@@ -16,7 +16,7 @@ class NavBar extends React.Component {
           <Link to="/posts" className="nav-link">Posts</Link>
           </li>
           <li className="nav-item">
-          <Link to="/tasks" className="nav-link">Tasks</Link>
+          <Link to="/todos" className="nav-link">Todos</Link>
           </li>
         </ul>
       </nav>
