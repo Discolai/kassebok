@@ -55,10 +55,10 @@ class GiftCards extends React.Component {
          onSubmit={this.handleAdd}
          modalHdr="Create new giftcard"
         />
-        <table className="table">
-          <thead>
+      <table className="table table-striped table-bordered">
+          <thead className="thead-dark">
             <tr>
-              <th>Card Number</th>
+              <th>Card id</th>
               <th>Value</th>
               <th>Sold on</th>
               <th>Sold by</th>
