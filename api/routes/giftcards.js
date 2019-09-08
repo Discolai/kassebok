@@ -10,7 +10,7 @@ class Giftcard {
   static insertGiftcard(req, res) {
     const { cardId, value, soldOn, soldBy, receivedOn, receivedBy} = req.body;
     db.query(
-      `INSERT INTO giftcards
+      `INSERT INTO GiftCards
       (cardId, value, soldOn, soldBy, receivedOn, receivedBy)
       VALUES (?, ?, ?, ?, ?, ?);`,
       [cardId, value, soldOn, soldBy, receivedOn || null, receivedBy || null],
@@ -26,7 +26,7 @@ class Giftcard {
 
   static getAllGiftcards(req, res) {
     db.query(
-      `SELECT * FROM giftcards ORDER BY cardId;`,
+      `SELECT * FROM GiftCards ORDER BY cardId;`,
       (error, results, fields) => {
         if (error) {
           res.status(500).send({error: error.code});
@@ -40,7 +40,7 @@ class Giftcard {
 
   static getSingleGiftcard(req, res)  {
     db.query(
-      `SELECT * FROM giftcards WHERE id = ?;`,
+      `SELECT * FROM GiftCards WHERE id = ?;`,
       [req.params.id],
       (error, results, fields) => {
         if (error) {
@@ -54,7 +54,7 @@ class Giftcard {
 
   static deleteGiftcard(req, res) {
     db.query(
-      `DELETE FROM giftcards WHERE id = ?;`,
+      `DELETE FROM GiftCards WHERE id = ?;`,
       [req.params.id],
       (error, results, fields) => {
         if (error) {
@@ -68,7 +68,7 @@ class Giftcard {
   static updateGiftcard(req, res) {
     const { cardId, value, soldOn, soldBy, receivedOn, receivedBy} = req.body;
     db.query(
-      `UPDATE giftcards
+      `UPDATE GiftCards
       SET cardId=?, value=?, soldOn=?, soldBy=?, receivedOn=?, receivedBy=?
       WHERE id = ?;`,
       [cardId, value, soldOn, soldBy, receivedOn || null, receivedBy || null, req.params.id],
