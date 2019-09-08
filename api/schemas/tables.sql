@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS Posts  (
   id INT(6) UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,
   content MEDIUMTEXT NOT NULL,
   author VARCHAR(30) NOT NULL,
-  datePosted TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  datePosted DATE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS TodosTemplates (
@@ -39,9 +39,15 @@ CREATE TABLE IF NOT EXISTS Todos (
 
 CREATE TABLE IF NOT EXISTS DailyTodos  (
   id INT(6) UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,
-  dateCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  dateCreated DATE NOT NULL UNIQUE,
   day ENUM ('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'),
   message TEXT
 );
 
--- SELECT DT.id, T.finished, TT.message from DailyTodos AS DT JOIN Todos AS T ON DT.id = T.dayRef JOIN TodosTemplates AS TT ON T.template = TT.id;
+INSERT INTO TodosTemplates
+(monday, tuesday, wednesday, thursday, friday, saturday, message)
+VALUES
+(1, 1, 1, 1, 1, 1, "Take out the trash"),
+(1, 1, 1, 1, 1, 1, "Clean the toilet"),
+(1, 1, 1, 1, 1, 1, "Vacuum the carpets"),
+(1, 0, 0, 1, 0, 0, "Clean the coffe machine milk container");
