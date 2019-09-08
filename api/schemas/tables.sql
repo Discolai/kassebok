@@ -2,7 +2,7 @@ CREATE DATABASE IF NOT EXISTS kassebok;
 
 USE kassebok;
 
-CREATE TABLE IF NOT EXISTS Giftcards (
+CREATE TABLE IF NOT EXISTS GiftCards (
   id INT(6) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   cardId INT(6) UNSIGNED NOT NULL UNIQUE,
   value INT(6) UNSIGNED NOT NULL,
@@ -18,3 +18,30 @@ CREATE TABLE IF NOT EXISTS Posts  (
   author VARCHAR(30) NOT NULL,
   datePosted TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS TodosTemplates (
+  id INT(6) UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,
+  monday TINYINT(1) NOT NULL,
+  tuesday TINYINT(1) NOT NULL,
+  wednesday TINYINT(1) NOT NULL,
+  thursday TINYINT(1) NOT NULL,
+  friday TINYINT(1) NOT NULL,
+  saturday TINYINT(1) NOT NULL,
+  message TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Todos (
+  id INT(6) UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,
+  dayRef INT(6) UNSIGNED REFERENCES DailyTodos(id),
+  template INT(6) UNSIGNED REFERENCES TodosTemplates(id),
+  completed TINYINT(1) DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS DailyTodos  (
+  id INT(6) UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,
+  dateCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  day ENUM ('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'),
+  message TEXT
+);
+
+-- SELECT DT.id, T.finished, TT.message from DailyTodos AS DT JOIN Todos AS T ON DT.id = T.dayRef JOIN TodosTemplates AS TT ON T.template = TT.id;
