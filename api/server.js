@@ -8,7 +8,8 @@ const app = express();
 
 app.use(bodyParser.json());
 app.use(morgan('combined'));
-app.use('/api/giftcards', require('./routes/giftcards.js'));
+app.use('/api/giftcards', require('./routes/giftcards'));
+app.use('/api/todos', require('./routes/todos'))
 
 
 app.listen(PORT, () => console.log(`Server listening on port: ${PORT}`));
