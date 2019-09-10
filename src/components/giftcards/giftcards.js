@@ -3,7 +3,6 @@ import axios from 'axios';
 
 import NavBar from '../navbar';
 import GiftCardItem from './giftcarditem';
-import PropTypes from 'prop-types';
 import GiftcardForm from './giftcardform';
 
 
@@ -99,10 +98,6 @@ class GiftCards extends React.Component {
       </React.Fragment>
     );
   }
-}
-
-GiftCards.propTypes = {
-  // giftcards: PropTypes.array.isRequired
 }
 
 export default GiftCards;

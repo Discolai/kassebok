@@ -1,6 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { Link , BrowserRouter as Router } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 
 class NavBar extends React.Component {
