@@ -9,7 +9,10 @@ const app = express();
 app.use(bodyParser.json());
 app.use(morgan('combined'));
 app.use('/api/giftcards', require('./routes/giftcards'));
-app.use('/api/todos', require('./routes/todos'))
+
+app.use('/api/daily-todos', require('./routes/dailytodos'));
+app.use('/api/todos', require('./routes/todos'));
+app.use('/api/todos-templates', require('./routes/todostemplates'));
 
 
 app.listen(PORT, () => console.log(`Server listening on port: ${PORT}`));
