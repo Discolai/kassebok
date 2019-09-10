@@ -43,11 +43,3 @@ CREATE TABLE IF NOT EXISTS DailyTodos  (
   day ENUM ('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'),
   message TEXT
 );
-
-INSERT INTO TodosTemplates
-(monday, tuesday, wednesday, thursday, friday, saturday, message)
-VALUES
-(1, 1, 1, 1, 1, 1, "Take out the trash"),
-(1, 1, 1, 1, 1, 1, "Clean the toilet"),
-(1, 1, 1, 1, 1, 1, "Vacuum the carpets"),
-(1, 0, 0, 1, 0, 0, "Clean the coffe machine milk container");
