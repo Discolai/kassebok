@@ -30,16 +30,20 @@ CREATE TABLE IF NOT EXISTS TodosTemplates (
   message TEXT NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS Todos (
-  id INT(6) UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,
-  dayRef INT(6) UNSIGNED REFERENCES DailyTodos(id),
-  template INT(6) UNSIGNED REFERENCES TodosTemplates(id),
-  completed TINYINT(1) DEFAULT 0
-);
-
 CREATE TABLE IF NOT EXISTS DailyTodos  (
   id INT(6) UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,
   dateCreated DATE NOT NULL UNIQUE,
   day ENUM ('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'),
   message TEXT
+);
+
+CREATE TABLE IF NOT EXISTS Todos (
+  id INT(6) UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,
+  dayRef INT(6) UNSIGNED NOT NULL,
+  template INT(6) UNSIGNED NOT NULL,
+  completed TINYINT(1) DEFAULT 0,
+  FOREIGN KEY (dayRef)
+  REFERENCES DailyTodos(id) ON DELETE CASCADE,
+  FOREIGN KEY (template)
+  REFERENCES TodosTemplates(id)
 );
