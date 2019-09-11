@@ -13,8 +13,11 @@ class TodoItem extends React.Component {
           checked={todo.completed}
           onChange={() => this.props.onChange(todo)}
         />
-      <label className="form-check-label">
-        {todo.message}
+      <label
+        className="form-check-label"
+        onClick={() => this.props.onChange(todo)}
+        >
+        {todo.completed ? <s>{todo.message}</s> : todo.message}
       </label>
       </div>
     );
