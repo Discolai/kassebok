@@ -35,8 +35,8 @@ class DailyTodos {
   static insertDailyTodo(req, res)  {
     db.query(
       `INSERT INTO DailyTodos
-      (day, message, dateCreated) VALUES (?, ?, CURRENT_DATE());`,
-      [req.body.day, req.body.message || ""],
+      (day, message, dateCreated) VALUES (?, ?, ?);`,
+      [req.body.day, req.body.message || "", req.body.dateCreated],
       (error, results, fields) => {
         if (error) {
           res.status(500).send({error: error.code});
