@@ -5,7 +5,7 @@ import '../node_modules/font-awesome/css/font-awesome.min.css';
 
 import GiftCards from './components/giftcards/giftcards';
 import Posts from './components/posts/posts';
-import Todos from './components/todos/todos';
+import DailyTodos from './components/todos/dailytodos';
 
 const notFound = () =>  {
   return (
@@ -20,7 +20,7 @@ class App extends React.Component {
           <Switch>
             <Route exact path="/giftcards" component={GiftCards}/>
             <Route exact path="/posts" component={Posts}/>
-            <Route exact path="/todos" component={Todos}/>
+            <Route exact path="/dailytodos" component={DailyTodos}/>
 
             <Route component={notFound}/>
           </Switch>
