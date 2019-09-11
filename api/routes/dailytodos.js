@@ -11,7 +11,7 @@ class DailyTodos {
   static getDailyTodo(req, res) {
     console.log(req.params.date);
     db.query(
-      `SELECT DT.message AS DailyMessage, T.id, T.completed, TT.message
+      `SELECT DT.message AS dailyMessage, T.id, T.completed, TT.message
       FROM DailyTodos AS DT
       JOIN Todos AS T ON DT.id = T.dayRef
       JOIN TodosTemplates AS TT ON T.template = TT.id
@@ -22,7 +22,11 @@ class DailyTodos {
           res.status(500).send({error: error.code});
         } else {
           res.status(results.length > 0 ? 200 : 404);
-          res.send({res: results});
+          res.send(
+            {
+              dailyMessage: results[0] ? results[0].dailyMessage : "",
+              res: results
+            });
         }
       }
     );
@@ -32,7 +36,7 @@ class DailyTodos {
     db.query(
       `INSERT INTO DailyTodos
       (day, message, dateCreated) VALUES (?, ?, CURRENT_DATE());`,
-      [req.body.day, req.body.message || null],
+      [req.body.day, req.body.message || ""],
       (error, results, fields) => {
         if (error) {
           res.status(500).send({error: error.code});
