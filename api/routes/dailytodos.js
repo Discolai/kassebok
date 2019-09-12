@@ -6,6 +6,27 @@ const cors = require('cors');
 
 const router = express.Router();
 
+function getDayString(date)  {
+  switch (new Date(date).getDay()) {
+    case 0:
+      return 'sunday';
+    case 1:
+      return 'monday';
+    case 2:
+      return 'tuesday';
+    case 3:
+      return 'wednesday';
+    case 4:
+      return 'thursday';
+    case 5:
+      return 'friday';
+    case 6:
+      return 'saturday';
+    default:
+      return '';
+  }
+}
+
 
 class DailyTodos {
   static getDailyTodo(req, res) {
@@ -33,10 +54,12 @@ class DailyTodos {
   }
 
   static insertDailyTodo(req, res)  {
+    const {dateCreated, message} = req.body;
+    const day = getDayString(dateCreated);
     db.query(
       `INSERT INTO DailyTodos
-      (day, message, dateCreated) VALUES (?, ?, ?);`,
-      [req.body.day, req.body.message || "", req.body.dateCreated],
+      (day, dateCreated, message) VALUES (?, ?, ?);`,
+      [day, dateCreated, message || ""],
       (error, results, fields) => {
         if (error) {
           res.status(500).send({error: error.code});
@@ -45,7 +68,7 @@ class DailyTodos {
             `INSERT INTO Todos
             (dayRef, template)
             SELECT ?, id FROM TodosTemplates WHERE ??;`,
-            [results.insertId, req.body.day],
+            [results.insertId, day],
             (error2, results2, fields2) => {
               if (error) {
                 res.status(500).send({error: error2.code});

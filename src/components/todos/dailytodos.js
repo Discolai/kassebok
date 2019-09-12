@@ -50,33 +50,18 @@ class DailyTodos extends React.Component {
     }
   };
 
-  getDayString(date)  {
-    switch (new Date(date).getDay()) {
-      case 0:
-        return 'sunday';
-      case 1:
-        return 'monday';
-      case 2:
-        return 'tuesday';
-      case 3:
-        return 'wednesday';
-      case 4:
-        return 'thursday';
-      case 5:
-        return 'friday';
-      case 6:
-        return 'saturday';
-      default:
-        return '';
-    }
-  }
-
   refresh = () => {
+    const today = new Date().toISOString().slice(0,10);
+
     axios.get(`http://localhost:8080/api/daily-todos/${this.state.date}`).then((response) => {
       this.setState({todos: response.data.res});
       this.setState({dailyMessage: response.data.dailyMessage || ""});
     }).catch((error) => {
-      axios.post(`http://localhost:8080/api/daily-todos`, {day: this.getDayString(this.state.date), dateCreated: this.state.date}).then((response) => {
+      if (this.state.date !== today) {
+        this.setState({todos: []});
+        return;
+      }
+      axios.post(`http://localhost:8080/api/daily-todos`, {dateCreated: this.state.date}).then((response) => {
         axios.get(`http://localhost:8080/api/daily-todos/${this.state.date}`).then((response) => {
           this.setState({todos: response.data.res});
           this.setState({dailyMessage: response.data.dailyMessage || ""});
@@ -90,6 +75,40 @@ class DailyTodos extends React.Component {
     this.refresh();
   }
 
+  renderTodos() {
+    return (
+      <React.Fragment>
+        <div className="row">
+          <div className="col-l-4 col-md-4 col-sm-6 col-xs-12">
+            {
+              this.state.todos.map((todo) => (
+                <TodoItem key={todo.id} todo={todo} onChange={this.handleClick} />
+              ))
+            }
+          </div>
+          <div className="col-l-8 col-md-8 col-sm-6 col-xs-12">
+            <label>Extra message</label>
+            <textarea
+              className="form-control"
+              name="dailyMessage"
+              value={this.state.dailyMessage}
+              onChange={this.handleTextChange}
+              />
+            <button className="btn btn-info" onClick={this.handleTextSubmit}>
+              Submit
+            </button>
+          </div>
+        </div>
+        <TodosTemplateForm
+        btnTxt="New todo"
+        btnIcon={<i className="fa fa-plus-square" aria-hidden="true"></i>}
+        onSubmit={this.handleAdd}
+        modalHdr="Create new todo"
+        />
+      </React.Fragment>
+    );
+  }
+
   render () {
     return (
       <React.Fragment>
@@ -100,33 +119,7 @@ class DailyTodos extends React.Component {
             <div className="card-body">
               <input className="form-control" type="date" value={this.state.date} onChange={this.handleNewDate}/>
               <br/>
-              <div className="row">
-                <div className="col-l-4 col-md-4 col-sm-6 col-xs-12">
-                  {
-                    this.state.todos.map((todo) => (
-                      <TodoItem key={todo.id} todo={todo} onChange={this.handleClick} />
-                    ))
-                  }
-                </div>
-                <div className="col-l-8 col-md-8 col-sm-6 col-xs-12">
-                  <label>Extra message</label>
-                  <textarea
-                    className="form-control"
-                    name="dailyMessage"
-                    value={this.state.dailyMessage}
-                    onChange={this.handleTextChange}
-                    />
-                  <button className="btn btn-info" onClick={this.handleTextSubmit}>
-                    Submit
-                  </button>
-                </div>
-              </div>
-              <TodosTemplateForm
-              btnTxt="New todo"
-              btnIcon={<i className="fa fa-plus-square" aria-hidden="true"></i>}
-              onSubmit={this.handleAdd}
-              modalHdr="Create new todo"
-              />
+              {this.state.todos.length ? this.renderTodos() : <p>No registered todos for today!</p>}
             </div>
           </div>
         </div>
