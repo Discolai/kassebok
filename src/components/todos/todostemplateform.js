@@ -90,7 +90,7 @@ class TodosTemplateForm extends React.Component {
   render () {
   return (
     <React.Fragment>
-      <button className="btn btn-primary" onClick={this.handleOpen}>
+      <button className="btn btn-primary mt-2" onClick={this.handleOpen}>
         {this.props.btnTxt} {this.props.btnIcon}
       </button>
       <Modal
