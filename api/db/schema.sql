@@ -45,5 +45,5 @@ CREATE TABLE IF NOT EXISTS Todos (
   FOREIGN KEY (dayRef)
   REFERENCES DailyTodos(id) ON DELETE CASCADE,
   FOREIGN KEY (template)
-  REFERENCES TodosTemplates(id)
+  REFERENCES TodosTemplates(id) ON DELETE CASCADE
 );
