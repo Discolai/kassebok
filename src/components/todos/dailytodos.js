@@ -94,16 +94,16 @@ class DailyTodos extends React.Component {
               value={this.state.dailyMessage}
               onChange={this.handleTextChange}
               />
-            <button className="btn btn-info" onClick={this.handleTextSubmit}>
+            <button className="btn btn-primary mt-2" onClick={this.handleTextSubmit}>
               Submit
             </button>
           </div>
         </div>
         <TodosTemplateForm
-        btnTxt="New todo"
-        btnIcon={<i className="fa fa-plus-square" aria-hidden="true"></i>}
-        onSubmit={this.handleAdd}
-        modalHdr="Create new todo"
+          btnTxt="New todo"
+          btnIcon={<i className="fa fa-plus-square" aria-hidden="true"></i>}
+          onSubmit={this.handleAdd}
+          modalHdr="Create new todo"
         />
       </React.Fragment>
     );
@@ -117,7 +117,12 @@ class DailyTodos extends React.Component {
           <h1>Daily todos</h1>
           <div className="card">
             <div className="card-body">
-              <input className="form-control" type="date" value={this.state.date} onChange={this.handleNewDate}/>
+              <div className="form-inline">
+                <input className="form-control mr-2" type="date" value={this.state.date} onChange={this.handleNewDate}/>
+                <button className="btn btn-primary" onClick={this.refresh}>
+                  <i className="fa fa-refresh" aria-hidden="true"></i>
+                </button>
+              </div>
               <br/>
               {this.state.todos.length ? this.renderTodos() : <p>No registered todos for today!</p>}
             </div>
