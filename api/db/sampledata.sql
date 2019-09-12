@@ -13,4 +13,9 @@ VALUES
 (1, 1, 1, 1, 1, 1, "Take out the trash"),
 (1, 1, 1, 1, 1, 1, "Clean the toilet"),
 (1, 1, 1, 1, 1, 1, "Vacuum the carpets"),
+(1, 1, 1, 1, 1, 1, "Count tickets"),
+(1, 1, 1, 1, 1, 1, "Sort receipts"),
+(1, 1, 1, 1, 1, 1, "Count the lotto cash"),
+(1, 1, 1, 1, 1, 1, "Clean the coffe machine"),
+(1, 1, 1, 1, 1, 1, "Sort out the vensafe"),
 (1, 0, 0, 1, 0, 0, "Clean the coffe machine milk container");
