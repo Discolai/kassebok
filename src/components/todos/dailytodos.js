@@ -50,6 +50,15 @@ class DailyTodos extends React.Component {
     }
   };
 
+  handleEdit = (form) =>  {
+    console.log(form);
+    axios.put(`http://localhost:8080/api/todos-templates/${form.id}`, form)
+    .then((response) => {
+      this.refresh();
+    })
+    .catch((error) => console.error(error));
+  };
+
   refresh = () => {
     const today = new Date().toISOString().slice(0,10);
 
@@ -78,33 +87,34 @@ class DailyTodos extends React.Component {
   renderTodos() {
     return (
       <React.Fragment>
-        <div className="row">
-          <div className="col-l-4 col-md-4 col-sm-6 col-xs-12">
+        <table className="table table-striped table-bordered">
+          <tbody>
             {
               this.state.todos.map((todo) => (
-                <TodoItem key={todo.id} todo={todo} onChange={this.handleClick} />
+                <tr key={todo.id}>
+                  <TodoItem
+                    key={todo.id}
+                    todo={todo}
+                    onChange={this.handleClick}
+                    onEdit={this.handleEdit}
+                  />
+                </tr>
               ))
             }
-          </div>
-          <div className="col-l-8 col-md-8 col-sm-6 col-xs-12">
-            <label>Extra message</label>
-            <textarea
-              className="form-control"
-              name="dailyMessage"
-              value={this.state.dailyMessage}
-              onChange={this.handleTextChange}
-              />
-            <button className="btn btn-primary mt-2" onClick={this.handleTextSubmit}>
-              Submit
-            </button>
-          </div>
-        </div>
-        <TodosTemplateForm
-          btnTxt="New todo"
-          btnIcon={<i className="fa fa-plus-square" aria-hidden="true"></i>}
-          onSubmit={this.handleAdd}
-          modalHdr="Create new todo"
-        />
+          </tbody>
+        </table>
+          <br/>
+          <label>Extra message</label>
+          <textarea
+            className="form-control"
+            name="dailyMessage"
+            value={this.state.dailyMessage}
+            onChange={this.handleTextChange}
+            />
+          <button className="btn btn-primary mt-2" onClick={this.handleTextSubmit}>
+            Submit
+          </button>
+          <br/>
       </React.Fragment>
     );
   }
@@ -117,12 +127,29 @@ class DailyTodos extends React.Component {
           <h1>Daily todos</h1>
           <div className="card">
             <div className="card-body">
-              <div className="form-inline">
-                <input className="form-control mr-2" type="date" value={this.state.date} onChange={this.handleNewDate}/>
-                <button className="btn btn-primary" onClick={this.refresh}>
-                  <i className="fa fa-refresh" aria-hidden="true"></i>
-                </button>
+              <div>
+                <div className="input-group">
+                  <input className="form-control" type="date" value={this.state.date} onChange={this.handleNewDate}/>
+                  <div className="input-group-append">
+                    <button className="btn btn-primary" onClick={this.refresh}>
+                      <i className="fa fa-refresh" aria-hidden="true"></i>
+                    </button>
+                  </div>
+                </div>
+                {
+                  this.state.todos.length ? (
+                    <div className="mt-2 mb-2">
+                      <TodosTemplateForm onSubmit={this.handleAdd} modalHdr="Create new todo">
+                        <button className="btn btn-primary float-left">
+                          New todo{" "}<i className="fa fa-plus-square" aria-hidden="true"></i>
+                        </button>
+                      </TodosTemplateForm>
+                    </div>
+
+                  ) : ""
+                }
               </div>
+              <br/>
               <br/>
               {this.state.todos.length ? this.renderTodos() : <p>No registered todos for today!</p>}
             </div>

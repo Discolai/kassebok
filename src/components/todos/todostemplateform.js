@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Modal from 'react-responsive-modal'
+import axios from 'axios'
 
 class TodosTemplateForm extends React.Component {
 
@@ -46,11 +47,24 @@ class TodosTemplateForm extends React.Component {
     e.preventDefault();
 
     let form = {...this.state};
-    delete form.open, form.inputs;
+    delete form.open;
+    delete form.inputs;
     this.props.onSubmit(form);
+    this.handleClose();
   }
 
-
+  componentDidMount() {
+    if (this.props.toEdit) {
+      axios.get(`http://localhost:8080/api/todos-templates/${this.props.toEdit}`)
+      .then((response) => {
+        const res = response.data.res[0]
+        for (var key in res) {
+          this.setState({[key]: res[key]});
+        }
+      })
+      .catch((error) => console.error(error));
+    }
+  }
 
   compileInputs() {
     const inputs = [];
@@ -88,38 +102,40 @@ class TodosTemplateForm extends React.Component {
   }
 
   render () {
-  return (
-    <React.Fragment>
-      <button className="btn btn-primary mt-2" onClick={this.handleOpen}>
-        {this.props.btnTxt} {this.props.btnIcon}
-      </button>
-      <Modal
-        open={this.state.open}
-        onClose={this.handleClose}
-        center
-        >
-        <h3>{this.props.modalHdr}</h3>
-        <form className="pl-2 pr-2" onSubmit={this.handleSubmit}>
-          <div className="form-row">
-            {this.compileInputs()}
-          </div>
-          <div className="mx-auto">
-            <button className="btn btn-primary" type="submit">
-              Submit
-            </button>
-          </div>
-        </form>
-      </Modal>
-    </React.Fragment>
+    const {children} = this.props;
+    return (
+      <React.Fragment>
+        {
+          children && React.Children.only(children).type === "button" ?
+          React.cloneElement(React.Children.only(children), {onClick: this.handleOpen}) :
+          (<button onClick={this.handleOpen}>open</button>)
+        }
+        <Modal
+          open={this.state.open}
+          onClose={this.handleClose}
+          center
+          >
+          <h3>{this.props.modalHdr}</h3>
+          <form className="pl-2 pr-2" onSubmit={this.handleSubmit}>
+            <div className="form-row">
+              {this.compileInputs()}
+            </div>
+            <div className="mx-auto">
+              <button className="btn btn-primary" type="submit">
+                Submit
+              </button>
+            </div>
+          </form>
+        </Modal>
+      </React.Fragment>
     );
   }
 }
 
 TodosTemplateForm.propTypes = {
-  btnTxt: PropTypes.string.isRequired,
-  btnIcon: PropTypes.object.isRequired,
   onSubmit: PropTypes.func.isRequired,
   modalHdr: PropTypes.string.isRequired,
+  toEdit: PropTypes.number
 }
 
 export default TodosTemplateForm;

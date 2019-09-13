@@ -32,7 +32,7 @@ class DailyTodos {
   static getDailyTodo(req, res) {
     console.log(req.params.date);
     db.query(
-      `SELECT DT.message AS dailyMessage, T.id, T.completed, TT.message
+      `SELECT DT.message AS dailyMessage, T.id, TT.id AS templateId, T.completed, TT.message
       FROM DailyTodos AS DT
       JOIN Todos AS T ON DT.id = T.dayRef
       JOIN TodosTemplates AS TT ON T.template = TT.id
