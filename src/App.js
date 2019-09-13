@@ -20,8 +20,7 @@ class App extends React.Component {
           <Switch>
             <Route exact path="/giftcards" component={GiftCards}/>
             <Route exact path="/posts" component={Posts}/>
-            <Route exact path="/dailytodos" component={DailyTodos}/>
-
+            <Route exact path="/daily-todos" component={DailyTodos}/>
             <Route component={notFound}/>
           </Switch>
       </Router>
