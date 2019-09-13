@@ -7,9 +7,24 @@ const router = express.Router();
 
 class TodosTemplates {
 
-  static getTodosTemplates(req, res) {
+  static getAllTodosTemplates(req, res) {
     db.query(
       `SELECT * FROM TodosTemplates;`,
+      (error, results, fields) => {
+        if (error) {
+          res.status(500).send({error: error.code});
+        } else {
+          res.status(results.length > 0 ? 200 : 404);
+          res.send({res: results});
+        }
+      }
+    );
+  }
+
+  static getDayTodosTemplates(req, res) {
+    db.query(
+      `SELECT * FROM TodosTemplates WHERE ??;`,
+      [req.params.day],
       (error, results, fields) => {
         if (error) {
           res.status(500).send({error: error.code});
@@ -95,9 +110,11 @@ class TodosTemplates {
 
 router.options('/', cors());
 router.options('/:id', cors());
+router.options('/day/:day', cors());
 
-router.get('/', cors(), TodosTemplates.getTodosTemplates);
+router.get('/', cors(), TodosTemplates.getAllTodosTemplates);
 router.get('/:id', cors(), TodosTemplates.getTodosTemplate);
+router.get('/day/:day', cors(), TodosTemplates.getDayTodosTemplates);
 
 router.post('/', cors(), TodosTemplates.insertTodosTemplate);
 
