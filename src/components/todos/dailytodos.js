@@ -3,6 +3,7 @@ import axios from 'axios'
 
 import NavBar from '../navbar';
 import TodoItem from './todoitem';
+import TemplateItem from './templates/templateitem'
 import TodosTemplateForm from './templates/templateform'
 
 class DailyTodos extends React.Component {
@@ -10,7 +11,8 @@ class DailyTodos extends React.Component {
     datePatt: new RegExp('\\d{4}-\\d{2}-\\d{2}'),
     date: new Date().toISOString().slice(0,10),
     dailyMessage: "",
-    todos: []
+    todos: [],
+    edit: false
   }
 
   handleClick = (todo) => {
@@ -100,35 +102,60 @@ class DailyTodos extends React.Component {
   renderTodos() {
     return (
       <React.Fragment>
-        <table className="table table-striped table-bordered">
-          <tbody>
-            {
-              this.state.todos.map((todo) => (
-                <tr key={todo.id}>
-                  <TodoItem
-                    key={todo.id}
-                    todo={todo}
-                    onChange={this.handleClick}
-                    onEdit={this.handleEdit}
-                    onDelete={this.handleDelete}
+        {
+          this.state.edit ?
+          (
+            <table className="table table-striped table-bordered">
+              <tbody>
+                {
+                  this.state.todos.map((todo) => (
+                    <tr key={todo.id}>
+                      <TemplateItem
+                        key={todo.id}
+                        template={todo}
+                        onEdit={this.handleEdit}
+                        onDelete={this.handleDelete}
+                      />
+                    </tr>
+                  ))
+                }
+              </tbody>
+            </table>
+          ) :
+          (
+            <React.Fragment>
+              <table className="table table-striped table-bordered">
+                <tbody>
+                  {
+                    this.state.todos.map((todo) => (
+                      <tr key={todo.id}>
+                        <TodoItem
+                          key={todo.id}
+                          todo={todo}
+                          onChange={this.handleClick}
+                          onEdit={this.handleEdit}
+                          onDelete={this.handleDelete}
+                        />
+                      </tr>
+                    ))
+                  }
+                </tbody>
+              </table>
+                <br/>
+                <label>Extra message</label>
+                <textarea
+                  className="form-control"
+                  name="dailyMessage"
+                  value={this.state.dailyMessage}
+                  onChange={this.handleTextChange}
                   />
-                </tr>
-              ))
-            }
-          </tbody>
-        </table>
-          <br/>
-          <label>Extra message</label>
-          <textarea
-            className="form-control"
-            name="dailyMessage"
-            value={this.state.dailyMessage}
-            onChange={this.handleTextChange}
-            />
-          <button className="btn btn-primary mt-2" onClick={this.handleTextSubmit}>
-            Submit
-          </button>
-          <br/>
+                <button className="btn btn-primary mt-2" onClick={this.handleTextSubmit}>
+                  Submit
+                </button>
+                <br/>
+            </React.Fragment>
+          )
+        }
       </React.Fragment>
     );
   }
@@ -154,9 +181,12 @@ class DailyTodos extends React.Component {
                   <TodosTemplateForm onSubmit={this.handleAdd} modalHdr="Create new todo">
                     <button className="btn btn-primary float-left">
                       New todo{" "}<i className="fa fa-plus-square" aria-hidden="true"></i>
+                    </button>
+                  </TodosTemplateForm>
+                  <button className="btn btn-primary float-right" onClick={() => this.setState({edit: !this.state.edit})}>
+                    Edit all templates{" "}<i className="fa fa-pencil" aria-hidden="true"></i>
                   </button>
-                </TodosTemplateForm>
-              </div>
+                </div>
               </div>
               <br/>
               <br/>
