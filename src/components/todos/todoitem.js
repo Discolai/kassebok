@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import TodosTemplateForm from './todostemplateform'
+import TodosTemplateForm from './templates/templateform'
 import AcceptPopup from '../acceptpopup'
 
 class TodoItem extends React.Component {

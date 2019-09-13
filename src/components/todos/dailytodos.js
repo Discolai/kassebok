@@ -3,7 +3,7 @@ import axios from 'axios'
 
 import NavBar from '../navbar';
 import TodoItem from './todoitem';
-import TodosTemplateForm from './todostemplateform'
+import TodosTemplateForm from './templates/templateform'
 
 class DailyTodos extends React.Component {
   state = {
