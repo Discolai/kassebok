@@ -61,12 +61,21 @@ class TodosTemplates {
       VALUES
       (?, ?, ?, ?, ?, ?, ?);`,
       [monday, tuesday, wednesday, thursday, friday, saturday, message],
-      (error, results, fields) =>  {
-        if (error) {
-          res.status(500).send({error: error.code});
+      (error1, results1, fields1) =>  {
+        if (error1) {
+          res.status(500).send({error: error1.code});
         } else {
-          res.status(results.affectedRows > 0 ? 200 : 400);
-          res.send({insertId: results.insertId});
+          db.query(
+            `INSERT INTO Todos (template, dayRef)
+            SELECT ?, id FROM DailyTodos WHERE dateCreated=CURDATE();`,
+            [results1.insertId],
+            (error2, results2, fields2) =>  {
+
+            }
+          );
+
+          res.status(results1.affectedRows > 0 ? 200 : 400);
+          res.send({insertId: results1.insertId});
         }
       }
     );
