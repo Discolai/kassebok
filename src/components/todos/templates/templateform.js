@@ -15,13 +15,13 @@ class TodosTemplateForm extends React.Component {
     saturday: false,
     message: "",
     inputs: [
-      {label: "Monday", name: "monday", type:"checkbox"},
-      {label: "Tuesday", name: "tuesday", type:"checkbox"},
-      {label: "Wednesday", name: "wednesday", type:"checkbox"},
-      {label: "Thursday", name: "thursday", type:"checkbox"},
-      {label: "Friday", name: "friday", type:"checkbox"},
-      {label: "Saturday", name: "saturday", type:"checkbox"},
-      {label: "Message", name: "message", type:"textarea", isRequired: true}
+      {label: "Monday", name: "monday", type:"checkbox", value: false},
+      {label: "Tuesday", name: "tuesday", type:"checkbox", value: false},
+      {label: "Wednesday", name: "wednesday", type:"checkbox", value: false},
+      {label: "Thursday", name: "thursday", type:"checkbox", value: false},
+      {label: "Friday", name: "friday", type:"checkbox", value: false},
+      {label: "Saturday", name: "saturday", type:"checkbox", value: false},
+      {label: "Message", name: "message", type:"textarea", isRequired: true, value: ""}
     ]
   }
 
@@ -31,6 +31,7 @@ class TodosTemplateForm extends React.Component {
 
   handleClose = () => {
     this.setState({open: false});
+    this.state.inputs.map((input) => this.setState({[input.name]: input.value}));
   }
 
   handleChange = (e) => {
