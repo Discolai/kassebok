@@ -65,14 +65,20 @@ class TodosTemplates {
         if (error1) {
           res.status(500).send({error: error1.code});
         } else {
-          db.query(
-            `INSERT INTO Todos (template, dayRef)
-            SELECT ?, id FROM DailyTodos WHERE dateCreated=CURDATE();`,
-            [results1.insertId],
-            (error2, results2, fields2) =>  {
+          const day = new Date().getDay();
+          const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
 
-            }
-          );
+          // Add the todo to todays todos
+          if (req.body[days[day]]) {
+            db.query(
+              `INSERT INTO Todos (template, dayRef)
+              SELECT ?, id FROM DailyTodos WHERE dateCreated=CURDATE();`,
+              [results1.insertId],
+              (error2, results2, fields2) =>  {
+              }
+            );
+          }
+
 
           res.status(results1.affectedRows > 0 ? 200 : 400);
           res.send({insertId: results1.insertId});
