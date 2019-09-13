@@ -59,6 +59,15 @@ class DailyTodos extends React.Component {
     .catch((error) => console.error(error));
   };
 
+  handleDelete = (form) =>  {
+    console.log(form);
+    axios.delete(`http://localhost:8080/api/todos-templates/${form.templateId}`)
+    .then((response) => {
+      console.log(response);
+      this.refresh();
+    })
+  };
+
   refresh = () => {
     const today = new Date().toISOString().slice(0,10);
 
@@ -70,12 +79,16 @@ class DailyTodos extends React.Component {
         this.setState({todos: []});
         return;
       }
-      axios.post(`http://localhost:8080/api/daily-todos`, {dateCreated: this.state.date}).then((response) => {
+      axios.post(`http://localhost:8080/api/daily-todos`, {dateCreated: this.state.date})
+      .then((response) => {
         axios.get(`http://localhost:8080/api/daily-todos/${this.state.date}`).then((response) => {
           this.setState({todos: response.data.res});
           this.setState({dailyMessage: response.data.dailyMessage || ""});
-        }).catch((error) => console.log(error));
-      });
+        }).catch((error) => {
+          this.setState({todos: []});
+        });
+      })
+      .catch((error) => this.setState({todos: []}));
     });
   }
 
@@ -97,6 +110,7 @@ class DailyTodos extends React.Component {
                     todo={todo}
                     onChange={this.handleClick}
                     onEdit={this.handleEdit}
+                    onDelete={this.handleDelete}
                   />
                 </tr>
               ))
@@ -136,18 +150,13 @@ class DailyTodos extends React.Component {
                     </button>
                   </div>
                 </div>
-                {
-                  this.state.todos.length ? (
-                    <div className="mt-2 mb-2">
-                      <TodosTemplateForm onSubmit={this.handleAdd} modalHdr="Create new todo">
-                        <button className="btn btn-primary float-left">
-                          New todo{" "}<i className="fa fa-plus-square" aria-hidden="true"></i>
-                        </button>
-                      </TodosTemplateForm>
-                    </div>
-
-                  ) : ""
-                }
+                <div className="mt-2 mb-2">
+                  <TodosTemplateForm onSubmit={this.handleAdd} modalHdr="Create new todo">
+                    <button className="btn btn-primary float-left">
+                      New todo{" "}<i className="fa fa-plus-square" aria-hidden="true"></i>
+                  </button>
+                </TodosTemplateForm>
+              </div>
               </div>
               <br/>
               <br/>

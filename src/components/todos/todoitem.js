@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import TodosTemplateForm from './todostemplateform'
-
+import AcceptPopup from '../acceptpopup'
 
 class TodoItem extends React.Component {
   render () {
@@ -30,9 +30,16 @@ class TodoItem extends React.Component {
                 <i className="fa fa-pencil" aria-hidden="true"></i>
               </button>
             </TodosTemplateForm>
+            <AcceptPopup
+              modalHdr="Are you sure you want to delete?"
+              onAccept={this.props.onDelete}
+              payload={this.props.todo}
+              role="Delete"
+            >
             <button className="btn btn-danger">
               <i className="fa fa-trash" aria-hidden="true"></i>
             </button>
+            </AcceptPopup>
           </div>
         </td>
     </React.Fragment>
@@ -43,7 +50,8 @@ class TodoItem extends React.Component {
 TodoItem.propTypes = {
   todo: PropTypes.object.isRequired,
   onChange: PropTypes.func.isRequired,
-  onEdit: PropTypes.func.isRequired
+  onEdit: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired
 }
 
 export default TodoItem;
