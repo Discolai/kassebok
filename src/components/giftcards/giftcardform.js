@@ -24,7 +24,7 @@ class GiftCardForm extends React.Component {
   }
 
 
-  onOpen = () => {
+  handleOpen = () => {
     if ('toEdit' in this.props) {
       for (var key in this.props.toEdit) {
         this.setState({[key]: this.props.toEdit[key] || ""});
@@ -62,6 +62,8 @@ class GiftCardForm extends React.Component {
   }
 
   render () {
+    const {children} = this.props;
+
     // Create array of inputs
     const inputs = [];
     this.state.inputs.forEach((input) => {
@@ -82,9 +84,11 @@ class GiftCardForm extends React.Component {
 
     return (
       <div>
-        <button className="btn" onClick={this.onOpen}>
-          {this.props.btnTxt} {this.props.btnIcon}
-        </button>
+        {
+          children && React.Children.only(children).type === "button" ?
+          React.cloneElement(React.Children.only(children), {onClick: this.handleOpen}) :
+          (<button onClick={this.handleOpen}>open</button>)
+        }
         <Modal open={this.state.open} onClose={this.onClose} center>
           <h3>{this.props.modalHdr}</h3>
           <form onSubmit={this.onSubmit}>
@@ -104,8 +108,6 @@ class GiftCardForm extends React.Component {
 }
 
 GiftCardForm.propTypes = {
-  btnTxt: PropTypes.string.isRequired,
-  btnIcon: PropTypes.object.isRequired,
   onSubmit: PropTypes.func.isRequired,
   modalHdr: PropTypes.string.isRequired,
 }

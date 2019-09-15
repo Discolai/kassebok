@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import NavBar from '../navbar';
 import GiftCardItem from './giftcarditem';
-import GiftcardForm from './giftcardform';
+import GiftCardForm from './giftcardform';
 
 
 class GiftCards extends React.Component {
@@ -63,12 +63,11 @@ class GiftCards extends React.Component {
               </button>
             </div>
             <div className="col-l-2 col-sm-4 col-xs-2">
-              <GiftcardForm
-                btnTxt="New giftcard"
-                btnIcon={<i className="fa fa-plus-square" aria-hidden="true"></i>}
-                onSubmit={this.handleAdd}
-                modalHdr="Create new giftcard"
-                />
+              <GiftCardForm onSubmit={this.handleAdd} modalHdr="Create new giftcard">
+                <button className="btn btn-primary">
+                  New giftcard{" "}<i className="fa fa-plus" aria-hidden="true"></i>
+                </button>
+              </GiftCardForm>
             </div>
             <div className="col-l-2 col-sm-4 col-xs-2">
             </div>

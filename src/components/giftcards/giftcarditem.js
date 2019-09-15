@@ -20,12 +20,14 @@ class GiftCardItem extends React.Component {
         <td>{receivedBy}</td>
         <td>
           <GiftCardForm
-           btnTxt=""
-           btnIcon={<i className="fa fa-cog" aria-hidden="true"></i>}
            onSubmit={this.props.onEdit}
            toEdit={this.props.giftcard}
            modalHdr="Edit giftcard"
-          />
+          >
+            <button className="btn btn-primary">
+              <i className="fa fa-pencil" aria-hidden="true"></i>
+            </button>
+          </GiftCardForm>
         </td>
       </tr>
     );
