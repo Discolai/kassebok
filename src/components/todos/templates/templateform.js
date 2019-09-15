@@ -26,6 +26,20 @@ class TodosTemplateForm extends React.Component {
   }
 
   handleOpen = () =>  {
+    if (this.props.editId) {
+      axios.get(`http://localhost:8080/api/todos-templates/${this.props.editId}`)
+      .then((response) => {
+        const res = response.data.res[0]
+        for (var key in res) {
+          this.setState({[key]: res[key]});
+        }
+      })
+      .catch((error) => console.error(error));
+    } else if (this.props.editObj) {
+      for (var key in this.props.editObj) {
+        this.setState({[key]: this.props.editObj[key]});
+      }
+    }
     this.setState({open: true});
   }
 
@@ -55,16 +69,7 @@ class TodosTemplateForm extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.toEdit) {
-      axios.get(`http://localhost:8080/api/todos-templates/${this.props.toEdit}`)
-      .then((response) => {
-        const res = response.data.res[0]
-        for (var key in res) {
-          this.setState({[key]: res[key]});
-        }
-      })
-      .catch((error) => console.error(error));
-    }
+
   }
 
   compileInputs() {
@@ -136,7 +141,8 @@ class TodosTemplateForm extends React.Component {
 TodosTemplateForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   modalHdr: PropTypes.string.isRequired,
-  toEdit: PropTypes.number
+  editId: PropTypes.number,
+  editObj: PropTypes.object
 }
 
 export default TodosTemplateForm;

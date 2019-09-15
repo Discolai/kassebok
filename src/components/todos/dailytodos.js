@@ -12,6 +12,7 @@ class DailyTodos extends React.Component {
     date: new Date().toISOString().slice(0,10),
     dailyMessage: "",
     todos: [],
+    templates: [],
     edit: false
   }
 
@@ -54,7 +55,7 @@ class DailyTodos extends React.Component {
 
   handleEdit = (form) =>  {
     console.log(form);
-    axios.put(`http://localhost:8080/api/todos-templates/${form.id}`, form)
+    axios.put(`http://localhost:8080/api/todos-templates/${form.templateId || form.id}`, form)
     .then((response) => {
       this.refresh();
     })
@@ -63,35 +64,52 @@ class DailyTodos extends React.Component {
 
   handleDelete = (form) =>  {
     console.log(form);
-    axios.delete(`http://localhost:8080/api/todos-templates/${form.templateId}`)
+    axios.delete(`http://localhost:8080/api/todos-templates/${form.templateId || form.id}`)
     .then((response) => {
       console.log(response);
       this.refresh();
     })
   };
 
-  refresh = () => {
-    const today = new Date().toISOString().slice(0,10);
+  handleEditAll = () => {
+    if (this.state.edit) {
+      this.setState({edit: !this.state.edit});
 
-    axios.get(`http://localhost:8080/api/daily-todos/${this.state.date}`).then((response) => {
-      this.setState({todos: response.data.res});
-      this.setState({dailyMessage: response.data.dailyMessage || ""});
-    }).catch((error) => {
-      if (this.state.date !== today) {
-        this.setState({todos: []});
-        return;
-      }
-      axios.post(`http://localhost:8080/api/daily-todos`, {dateCreated: this.state.date})
+    } else {
+      this.setState({edit: !this.state.edit}, this.refresh);
+    }
+  }
+
+  refresh = () => {
+    if (this.state.edit) {
+      axios.get(`http://localhost:8080/api/todos-templates`)
       .then((response) => {
-        axios.get(`http://localhost:8080/api/daily-todos/${this.state.date}`).then((response) => {
-          this.setState({todos: response.data.res});
-          this.setState({dailyMessage: response.data.dailyMessage || ""});
-        }).catch((error) => {
-          this.setState({todos: []});
-        });
+        this.setState({templates: response.data.res});
       })
-      .catch((error) => this.setState({todos: []}));
-    });
+      .catch((error) => console.log(error));
+    } else {
+      const today = new Date().toISOString().slice(0,10);
+
+      axios.get(`http://localhost:8080/api/daily-todos/${this.state.date}`).then((response) => {
+        this.setState({todos: response.data.res});
+        this.setState({dailyMessage: response.data.dailyMessage || ""});
+      }).catch((error) => {
+        if (this.state.date !== today) {
+          this.setState({todos: []});
+          return;
+        }
+        axios.post(`http://localhost:8080/api/daily-todos`, {dateCreated: this.state.date})
+        .then((response) => {
+          axios.get(`http://localhost:8080/api/daily-todos/${this.state.date}`).then((response) => {
+            this.setState({todos: response.data.res});
+            this.setState({dailyMessage: response.data.dailyMessage || ""});
+          }).catch((error) => {
+            this.setState({todos: []});
+          });
+        })
+        .catch((error) => this.setState({todos: []}));
+      });
+    }
   }
 
 
@@ -102,61 +120,59 @@ class DailyTodos extends React.Component {
   renderTodos() {
     return (
       <React.Fragment>
-        {
-          this.state.edit ?
-          (
-            <table className="table table-striped table-bordered">
-              <tbody>
-                {
-                  this.state.todos.map((todo) => (
-                    <tr key={todo.id}>
-                      <TemplateItem
-                        key={todo.id}
-                        template={todo}
-                        onEdit={this.handleEdit}
-                        onDelete={this.handleDelete}
-                      />
-                    </tr>
-                  ))
-                }
-              </tbody>
-            </table>
-          ) :
-          (
-            <React.Fragment>
-              <table className="table table-striped table-bordered">
-                <tbody>
-                  {
-                    this.state.todos.map((todo) => (
-                      <tr key={todo.id}>
-                        <TodoItem
-                          key={todo.id}
-                          todo={todo}
-                          onChange={this.handleClick}
-                          onEdit={this.handleEdit}
-                          onDelete={this.handleDelete}
-                        />
-                      </tr>
-                    ))
-                  }
-                </tbody>
-              </table>
-                <br/>
-                <label>Extra message</label>
-                <textarea
-                  className="form-control"
-                  name="dailyMessage"
-                  value={this.state.dailyMessage}
-                  onChange={this.handleTextChange}
-                  />
-                <button className="btn btn-primary mt-2" onClick={this.handleTextSubmit}>
-                  Submit
-                </button>
-                <br/>
-            </React.Fragment>
-          )
-        }
+        <React.Fragment>
+          <table className="table table-striped table-bordered">
+            <tbody>
+              {
+                this.state.todos.map((todo) => (
+                  <tr key={todo.id}>
+                    <TodoItem
+                      key={todo.id}
+                      todo={todo}
+                      onChange={this.handleClick}
+                      onEdit={this.handleEdit}
+                      onDelete={this.handleDelete}
+                    />
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+            <br/>
+            <label>Extra message</label>
+            <textarea
+              className="form-control"
+              name="dailyMessage"
+              value={this.state.dailyMessage}
+              onChange={this.handleTextChange}
+              />
+            <button className="btn btn-primary mt-2" onClick={this.handleTextSubmit}>
+              Submit
+            </button>
+            <br/>
+        </React.Fragment>
       </React.Fragment>
+    );
+  }
+
+  renderTemplates() {
+    return (
+      <table className="table table-striped table-bordered">
+        <tbody>
+          {
+            this.state.templates.map((template) => (
+              <tr key={template.id}>
+                <TemplateItem
+                  key={template.id}
+                  template={template}
+                  onEdit={this.handleEdit}
+                  onDelete={this.handleDelete}
+                />
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
     );
   }
 
@@ -169,28 +185,46 @@ class DailyTodos extends React.Component {
           <div className="card">
             <div className="card-body">
               <div>
-                <div className="input-group">
-                  <input className="form-control" type="date" value={this.state.date} onChange={this.handleNewDate}/>
-                  <div className="input-group-append">
-                    <button className="btn btn-primary" onClick={this.refresh}>
-                      <i className="fa fa-refresh" aria-hidden="true"></i>
-                    </button>
-                  </div>
-                </div>
+                {
+                  this.state.edit ? "" :
+                  (
+                    <div className="input-group">
+                      <input className="form-control" type="date" value={this.state.date} onChange={this.handleNewDate}/>
+                      <div className="input-group-append">
+                        <button className="btn btn-primary" onClick={this.refresh}>
+                          <i className="fa fa-refresh" aria-hidden="true"></i>
+                        </button>
+                      </div>
+                    </div>
+                  )
+                }
                 <div className="mt-2 mb-2">
                   <TodosTemplateForm onSubmit={this.handleAdd} modalHdr="Create new todo">
                     <button className="btn btn-primary float-left">
                       New todo{" "}<i className="fa fa-plus-square" aria-hidden="true"></i>
                     </button>
                   </TodosTemplateForm>
-                  <button className="btn btn-primary float-right" onClick={() => this.setState({edit: !this.state.edit})}>
-                    Edit all templates{" "}<i className="fa fa-pencil" aria-hidden="true"></i>
+                  <button className="btn btn-primary float-right" onClick={this.handleEditAll}>
+                    {
+                      this.state.edit ?
+                      <i className="fa fa-arrow-left" aria-hidden="true"></i>
+                      :
+                      <i className="fa fa-pencil" aria-hidden="true"></i>
+                    }
                   </button>
                 </div>
               </div>
               <br/>
               <br/>
-              {this.state.todos.length ? this.renderTodos() : <p>No registered todos for today!</p>}
+              {
+                this.state.edit ?
+                this.renderTemplates()
+                :
+                this.state.todos.length ?
+                this.renderTodos()
+                :
+                <p>No registered todos for today!</p>
+              }
             </div>
           </div>
         </div>

@@ -4,6 +4,7 @@ import TodosTemplateForm from './templates/templateform'
 import AcceptPopup from '../acceptpopup'
 
 class TodoItem extends React.Component {
+
   render () {
     const {todo} = this.props;
 
@@ -25,7 +26,7 @@ class TodoItem extends React.Component {
             {todo.completed ? <s>{todo.message}</s> : todo.message}
           </label>
           <div className="float-right">
-            <TodosTemplateForm toEdit={this.props.todo.templateId} onSubmit={this.props.onEdit} modalHdr="Edit todo">
+            <TodosTemplateForm editId={this.props.todo.templateId} onSubmit={this.props.onEdit} modalHdr="Edit todo">
               <button className="btn btn-primary mr-1">
                 <i className="fa fa-pencil" aria-hidden="true"></i>
               </button>

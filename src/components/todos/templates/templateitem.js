@@ -12,7 +12,7 @@ class TemplateItem extends React.Component {
         <td>
           {template.message}
           <div className="float-right">
-            <TodosTemplateForm toEdit={this.props.template.templateId} onSubmit={this.props.onEdit} modalHdr="Edit todo">
+            <TodosTemplateForm editObj={this.props.template} onSubmit={this.props.onEdit} modalHdr="Edit todo">
               <button className="btn btn-primary mr-1">
                 <i className="fa fa-pencil" aria-hidden="true"></i>
               </button>
@@ -36,7 +36,6 @@ class TemplateItem extends React.Component {
 
 TemplateItem.propTypes = {
   template: PropTypes.object.isRequired,
-  onChange: PropTypes.func.isRequired,
   onEdit: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired
 }
