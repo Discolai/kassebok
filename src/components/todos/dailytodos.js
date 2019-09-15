@@ -201,7 +201,7 @@ class DailyTodos extends React.Component {
                 <div className="mt-2 mb-2">
                   <TodosTemplateForm onSubmit={this.handleAdd} modalHdr="Create new todo">
                     <button className="btn btn-primary float-left">
-                      New todo{" "}<i className="fa fa-plus-square" aria-hidden="true"></i>
+                      New todo{" "}<i className="fa fa-plus" aria-hidden="true"></i>
                     </button>
                   </TodosTemplateForm>
                   <button className="btn btn-primary float-right" onClick={this.handleEditAll}>
