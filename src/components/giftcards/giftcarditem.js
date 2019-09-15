@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import GiftCardForm from './giftcardform'
 
+import {formatDate} from '../../utility'
 
 class GiftCardItem extends React.Component {
   state = {
@@ -14,10 +15,10 @@ class GiftCardItem extends React.Component {
       <tr>
         <th>{cardId}</th>
         <td>{value}</td>
-        <td>{soldOn}</td>
+        <td>{soldOn ? formatDate(soldOn) : ""}</td>
         <td>{soldBy}</td>
         <td>{receivedOn}</td>
-        <td>{receivedBy}</td>
+        <td>{receivedBy ? formatDate(receivedBy) : ""}</td>
         <td>
           <GiftCardForm
            onSubmit={this.props.onEdit}
