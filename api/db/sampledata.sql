@@ -19,3 +19,8 @@ VALUES
 (1, 1, 1, 1, 1, 1, "Clean the coffe machine"),
 (1, 1, 1, 1, 1, 1, "Sort out the vensafe"),
 (1, 0, 0, 1, 0, 0, "Clean the coffe machine milk container");
+
+INSERT INTO Users
+(email, userName, password)
+VALUES
+("Nikolainh@hotmail.com", "Nikolai", "$2b$12$tWrX2nWc9nVYmG.gkWG0G.1RsU.uQlB0XX8/A0j1/VjIoTsDOiA8i");
