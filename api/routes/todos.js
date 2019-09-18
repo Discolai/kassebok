@@ -1,5 +1,4 @@
-const db = require('../db.js');
-const mysql = require('mysql');
+const {pool} = require('../config/mysql.js');
 
 const express = require('express');
 const cors = require('cors');
@@ -8,19 +7,15 @@ const router = express.Router();
 
 class Todos {
   static updateTodo(req, res)  {
-    db.query(
+    pool.execute(
       `UPDATE Todos
       SET completed = ?
       WHERE id = ?;`,
-      [req.body.completed, req.params.id],
-      (error, results, fields) => {
-        if (error) {
-          res.status(500).send({error: error.code});
-        } else {
-          res.status(results.affectedRows > 0 ? 204 : 400).send();
-        }
-      }
-    );
+      [req.body.completed, req.params.id])
+      .then(([result, fields]) => {
+        res.status(result.affectedRows > 0 ? 204 : 400).send();
+      })
+      .catch((err) => res.status(500).send({err: err.code}));
   }
 }
 

@@ -1,5 +1,4 @@
-const db = require('../db.js');
-const mysql = require('mysql');
+const {pool} = require('../config/mysql.js');
 
 const express = require('express');
 const cors = require('cors');
@@ -9,76 +8,57 @@ const router = express.Router();
 class Giftcard {
   static insertGiftcard(req, res) {
     const { cardId, value, soldOn, soldBy, receivedOn, receivedBy} = req.body;
-    db.query(
+    pool.execute(
       `INSERT INTO GiftCards
       (cardId, value, soldOn, soldBy, receivedOn, receivedBy)
       VALUES (?, ?, ?, ?, ?, ?);`,
-      [cardId, value, soldOn, soldBy, receivedOn || null, receivedBy || null],
-      (error, results, fields) => {
-        if (error) {
-          res.status(500).send({error: error.code});
-        } else {
-          res.status(results.affectedRows > 0 ? 200 : 400)
-          .send({insertId: results.insertId});
-        }
-    });
+      [cardId, value, soldOn, soldBy, receivedOn || null, receivedBy || null])
+      .then(([result, fields]) => {
+        res.status(result.affectedRows > 0 ? 200 : 400).send({insertId: result.insertId});
+      })
+      .catch((err) => res.status(500).send({err: err.code}));
   }
 
   static getAllGiftcards(req, res) {
-    db.query(
-      `SELECT * FROM GiftCards ORDER BY cardId;`,
-      (error, results, fields) => {
-        if (error) {
-          res.status(500).send({error: error.code});
-        } else {
+    pool.execute(`SELECT * FROM GiftCards ORDER BY cardId;`)
+      .then(([rows, fields]) => {
+        res.status(rows.length > 0 ? 200 : 404).send({res: rows});
+      })
+      .catch((err) => res.status(500).send({err: err.code}));
 
-          res.status(results.length > 0 ? 200 : 404);
-          res.send({res: results});
-        }
-    });
   }
 
   static getSingleGiftcard(req, res)  {
-    db.query(
+    pool.execute(
       `SELECT * FROM GiftCards WHERE id = ?;`,
-      [req.params.id],
-      (error, results, fields) => {
-        if (error) {
-          res.status(500).send({error: error.code});
-        } else {
-          res.status(results.length > 0 ? 200 : 404);
-          res.send({res: results});
-        }
-    });
+      [req.params.id])
+      .then(([rows, fields]) => {
+        res.status(rows.length > 0 ? 200 : 404).send({res: rows});
+      })
+      .catch((err) => res.status(500).send({err: err.code}));
   }
 
   static deleteGiftcard(req, res) {
-    db.query(
+    pool.execute(
       `DELETE FROM GiftCards WHERE id = ?;`,
-      [req.params.id],
-      (error, results, fields) => {
-        if (error) {
-          res.status(500).send({error: error.code});
-        } else {
-          res.status(results.affectedRows > 0 ? 204 : 404).send();
-        }
-    });
+      [req.params.id])
+      .then(([result, fields]) => {
+        res.status(result.affectedRows > 0 ? 204 : 404).send();
+      })
+      .catch((err) => res.status(500).send({err: err.code}));
   }
 
   static updateGiftcard(req, res) {
     const { cardId, value, soldOn, soldBy, receivedOn, receivedBy} = req.body;
-    db.query(
+    pool.execute(
       `UPDATE GiftCards
       SET cardId=?, value=?, soldOn=?, soldBy=?, receivedOn=?, receivedBy=?
       WHERE id = ?;`,
-      [cardId, value, soldOn, soldBy, receivedOn || null, receivedBy || null, req.params.id],
-      (error, results, fields) => {
-        if (error) {
-          res.status(500).send({error: error.code});
-        } else {
-          res.status(results.affectedRows > 0 ? 204 : 404).send();
-        }
-    });
+      [cardId, value, soldOn, soldBy, receivedOn || null, receivedBy || null, req.params.id])
+      .then(([result, fields]) => {
+        res.status(result.affectedRows > 0 ? 204 : 404).send();
+      })
+      .catch((err) => res.status(500).send({err: err.code}));
   }
 };
 

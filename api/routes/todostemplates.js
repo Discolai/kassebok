@@ -1,125 +1,81 @@
-const db = require('../db.js');
+const {pool} = require('../config/mysql.js');
 
 const express = require('express');
 const cors = require('cors');
+const {getDayString} = require('../utility');
+
 
 const router = express.Router();
 
 class TodosTemplates {
 
   static getAllTodosTemplates(req, res) {
-    db.query(
-      `SELECT * FROM TodosTemplates;`,
-      (error, results, fields) => {
-        if (error) {
-          res.status(500).send({error: error.code});
-        } else {
-          res.status(results.length > 0 ? 200 : 404);
-          res.send({res: results});
-        }
-      }
-    );
+    pool.execute(`SELECT * FROM TodosTemplates;`)
+      .then(([rows, fields]) => {
+        res.status(rows.length > 0 ? 200 : 404).send({res: rows});
+      })
+      .catch((err) => res.status(500).send({err: err.code}));
   }
 
   static getDayTodosTemplates(req, res) {
-    db.query(
-      `SELECT * FROM TodosTemplates WHERE ??;`,
-      [req.params.day],
-      (error, results, fields) => {
-        if (error) {
-          res.status(500).send({error: error.code});
-        } else {
-          res.status(results.length > 0 ? 200 : 404);
-          res.send({res: results});
-        }
-      }
-    );
+    pool.execute(`SELECT * FROM TodosTemplates WHERE ??;`,[req.params.day])
+      .then(([rows, fields]) => {
+        res.status(rows.length > 0 ? 200 : 404).send({res: rows});
+      })
+      .catch((err) => res.status(500).send({err: err.code}));
   }
 
   static getTodosTemplate(req, res) {
-    db.query(
-      `SELECT * FROM TodosTemplates
-      WHERE id = ?;`,
-      [req.params.id],
-      (error, results, fields) => {
-        if (error) {
-          res.status(500).send({error: error.code});
-        } else {
-          res.status(results.length > 0 ? 200 : 404);
-          res.send({res: results});
-        }
-      }
-    );
+    pool.execute(`SELECT * FROM TodosTemplates WHERE id = ?;`,[req.params.id])
+    .then(([rows, fields]) => {
+      res.status(rows.length > 0 ? 200 : 404).send({res: rows});
+    })
+    .catch((err) => res.status(500).send({err: err.code}));
   }
 
   static insertTodosTemplate(req, res)  {
     const {monday, tuesday, wednesday, thursday, friday, saturday, message} = req.body;
-
-    db.query(
+    pool.execute(
       `INSERT INTO TodosTemplates
       (monday, tuesday, wednesday, thursday, friday, saturday, message)
       VALUES
       (?, ?, ?, ?, ?, ?, ?);`,
-      [monday, tuesday, wednesday, thursday, friday, saturday, message],
-      (error1, results1, fields1) =>  {
-        if (error1) {
-          res.status(500).send({error: error1.code});
-        } else {
-          const day = new Date().getDay();
-          const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
-
-          // Add the todo to todays todos
-          if (req.body[days[day]]) {
-            db.query(
-              `INSERT INTO Todos (template, dayRef)
-              SELECT ?, id FROM DailyTodos WHERE dateCreated=CURDATE();`,
-              [results1.insertId],
-              (error2, results2, fields2) =>  {
-              }
-            );
-          }
-
-
-          res.status(results1.affectedRows > 0 ? 200 : 400);
-          res.send({insertId: results1.insertId});
+      [monday, tuesday, wednesday, thursday, friday, saturday, message])
+      .then(([result, fields]) => {
+        if (req.body[getDayString(new Date())]) {
+          pool.execute(
+            `INSERT INTO Todos (template, dayRef)
+            SELECT ?, id FROM DailyTodos WHERE dateCreated=CURDATE();`,
+            [result.insertId])
+            .catch((err) => res.status(500).send({err: err.code}));
         }
-      }
-    );
+        res.status(result.affectedRows > 0 ? 200 : 400).send({insertId: result.insertId});
+      })
+      .catch((err) => res.status(500).send({err: err.code}));
   }
 
   static updateTodosTemplate(req, res)  {
     const {monday, tuesday, wednesday, thursday, friday, saturday, message} = req.body;
-
-    db.query(
+    pool.execute(
       `UPDATE TodosTemplates SET
       monday=?, tuesday=?, wednesday=?, thursday=?, friday=?, saturday=?, message=?
       WHERE id=?;`,
-      [monday, tuesday, wednesday, thursday, friday, saturday, message, req.params.id],
-      (error, results, fields) =>  {
-        if (error) {
-          res.status(500).send({error: error.code});
-        } else {
-          res.status(results.affectedRows > 0 ? 204 : 400);
-          res.send();
-        }
-      }
-    );
+      [monday, tuesday, wednesday, thursday, friday, saturday, message, req.params.id])
+      .then(([result, fields]) => {
+        res.status(result.affectedRows > 0 ? 204 : 400).send();
+      })
+      .catch((err) => res.status(500).send({err: err.code}));
   }
 
   static deleteTodosTemplate(req, res)  {
-    db.query(
+    pool.execute(
       `DELETE FROM TodosTemplates
       WHERE id = ?;`,
-      [req.params.id],
-      (error, results, fields) => {
-        if (error) {
-          res.status(500).send({error: error.code});
-        } else {
-          res.status(results.affectedRows > 0 ? 204 : 404);
-          res.send();
-        }
-      }
-    );
+      [req.params.id])
+      .then(([result, fields]) => {
+        res.status(result.affectedRows > 0 ? 204 : 400).send();
+      })
+      .catch((err) => res.status(500).send({err: err.code}));
   }
 }
 
