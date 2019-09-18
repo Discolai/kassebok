@@ -93,7 +93,8 @@ class Users {
           if (err) {
             res.status(500).send(err);
           } else {
-            res.setHeader('Authorization', 'Bearer ' + token);
+            // res.setHeader('Authorization', 'Bearer ' + token);
+            res.cookie('jwt', token, {httpOnly: true, secure: true});
             res.send();
           }
         });

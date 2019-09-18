@@ -28,8 +28,8 @@ const localStrategy = new LocalStrategy({
 );
 
 const jwtStrategy = new JwtStrategy({
-  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  // jwtFromRequest: req => req.cookies.jwt,
+  // jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  jwtFromRequest: req => req.cookies.jwt,
   secretOrKey: secret
   },
   (jwtPayload, done) => {
