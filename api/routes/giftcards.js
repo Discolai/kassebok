@@ -16,7 +16,7 @@ class Giftcard {
       .then(([result, fields]) => {
         res.status(result.affectedRows > 0 ? 200 : 400).send({insertId: result.insertId});
       })
-      .catch((err) => res.status(500).send({err: err.code}));
+      .catch((err) => res.status(400).send({errno: err.errno}));
   }
 
   static getAllGiftcards(req, res) {
@@ -24,8 +24,7 @@ class Giftcard {
       .then(([rows, fields]) => {
         res.status(rows.length > 0 ? 200 : 404).send({res: rows});
       })
-      .catch((err) => res.status(500).send({err: err.code}));
-
+      .catch((err) => res.status(400).send({errno: err.errno}));
   }
 
   static getSingleGiftcard(req, res)  {
@@ -35,7 +34,7 @@ class Giftcard {
       .then(([rows, fields]) => {
         res.status(rows.length > 0 ? 200 : 404).send({res: rows});
       })
-      .catch((err) => res.status(500).send({err: err.code}));
+      .catch((err) => res.status(400).send({errno: err.errno}));
   }
 
   static deleteGiftcard(req, res) {
@@ -45,7 +44,7 @@ class Giftcard {
       .then(([result, fields]) => {
         res.status(result.affectedRows > 0 ? 204 : 404).send();
       })
-      .catch((err) => res.status(500).send({err: err.code}));
+      .catch((err) => res.status(400).send({errno: err.errno}));
   }
 
   static updateGiftcard(req, res) {
@@ -58,7 +57,7 @@ class Giftcard {
       .then(([result, fields]) => {
         res.status(result.affectedRows > 0 ? 204 : 404).send();
       })
-      .catch((err) => res.status(500).send({err: err.code}));
+      .catch((err) => res.status(400).send({errno: err.errno}));
   }
 };
 
