@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import GiftCardForm from './giftcardform'
-
+import AcceptPopup from '../acceptpopup'
 import {formatDate} from '../../utility'
 
 class GiftCardItem extends React.Component {
@@ -19,16 +19,26 @@ class GiftCardItem extends React.Component {
         <td>{soldBy}</td>
         <td>{receivedOn}</td>
         <td>{receivedBy ? formatDate(receivedBy) : ""}</td>
-        <td>
+        <td width="110px">
           <GiftCardForm
            onSubmit={this.props.onEdit}
            toEdit={this.props.giftcard}
            modalHdr="Edit giftcard"
           >
-            <button className="btn btn-primary">
+            <button className="btn btn-primary float-left">
               <i className="fa fa-pencil" aria-hidden="true"></i>
             </button>
           </GiftCardForm>
+          <AcceptPopup
+            modalHdr="Are you sure you want to delete?"
+            onAccept={this.props.onDelete}
+            payload={this.props.giftcard}
+            role="Delete"
+          >
+          <button className="btn btn-danger float-right">
+            <i className="fa fa-trash" aria-hidden="true"></i>
+          </button>
+          </AcceptPopup>
         </td>
       </tr>
     );
@@ -37,7 +47,8 @@ class GiftCardItem extends React.Component {
 
 GiftCardItem.propTypes = {
   giftcard: PropTypes.object.isRequired,
-  onEdit: PropTypes.func.isRequired
+  onEdit: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired
 }
 
 export default GiftCardItem;

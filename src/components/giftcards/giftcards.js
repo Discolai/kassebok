@@ -29,10 +29,9 @@ class GiftCards extends React.Component {
   }
 
   handleEdit = (giftcard) => {
-    const giftcards = [...this.state.giftcards].map(g => g = g.id === giftcard.id ? giftcard : g);
-
     axios.put(`/api/giftcards/${giftcard.id}`, giftcard)
     .then((response) => {
+      const giftcards = [...this.state.giftcards].map(g => g = g.id === giftcard.id ? giftcard : g);
       this.setState({giftcards: giftcards});
     })
     .catch((error) => {
@@ -40,9 +39,16 @@ class GiftCards extends React.Component {
     });
   }
 
+  handleDelete = (giftcard) =>  {
+    axios.delete(`/api/giftcards/${giftcard.id}`)
+    .then((response) => {
+      this.setState({giftcards: this.state.giftcards.filter((g) => g.id !== giftcard.id)});
+    })
+    .catch((err) => console.log(err));
+  }
+
   componentDidMount() {
     axios.get('/api/giftcards').then((response) => {
-      // console.log(response);
       this.setState({giftcards: response.data.res});
     });
   }
@@ -87,7 +93,7 @@ class GiftCards extends React.Component {
             <tbody>
               {
                 this.state.giftcards.map((giftcard) => (
-                  <GiftCardItem key={giftcard.id} giftcard={giftcard} onEdit={this.handleEdit}/>
+                  <GiftCardItem key={giftcard.id} giftcard={giftcard} onEdit={this.handleEdit} onDelete={this.handleDelete}/>
                 ))
               }
             </tbody>
