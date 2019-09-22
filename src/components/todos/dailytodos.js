@@ -53,21 +53,20 @@ class DailyTodos extends React.Component {
     }
   };
 
-  handleEdit = (form) =>  {
-    console.log(form);
-    axios.put(`/api/todos-templates/${form.templateId || form.id}`, form)
+  handleEdit = (template) =>  {
+    axios.put(`/api/todos-templates/${template.templateId || template.id}`, template)
     .then((response) => {
-      this.refresh();
+      const templates = [...this.state.templates].map(t => t = t.id === template.id ? template : t);
+      this.setState({templates: templates});
     })
     .catch((error) => console.error(error));
   };
 
-  handleDelete = (form) =>  {
-    console.log(form);
-    axios.delete(`/api/todos-templates/${form.templateId || form.id}`)
+  handleDelete = (template) =>  {
+    axios.delete(`/api/todos-templates/${template.templateId || template.id}`)
     .then((response) => {
-      console.log(response);
-      this.refresh();
+      this.setState({todos: this.state.todos.filter((t) => t.templateId !== template.id)});
+      this.setState({templates: this.state.templates.filter((t) => t.id !== template.id)});
     })
   };
 
@@ -94,7 +93,6 @@ class DailyTodos extends React.Component {
         this.setState({todos: response.data.res});
         this.setState({dailyMessage: response.data.dailyMessage || ""});
       }).catch((error) => {
-        if (error.response.status === 401) throw "Unauthorized";
         if (this.state.date !== today) {
           this.setState({todos: []});
           return;
