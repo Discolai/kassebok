@@ -27,7 +27,7 @@ class TodosTemplateForm extends React.Component {
 
   handleOpen = () =>  {
     if (this.props.editId) {
-      axios.get(`http://localhost:8080/api/todos-templates/${this.props.editId}`)
+      axios.get(`/api/todos-templates/${this.props.editId}`)
       .then((response) => {
         const res = response.data.res[0]
         for (var key in res) {

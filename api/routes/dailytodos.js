@@ -1,5 +1,5 @@
 const {pool} = require('../config/mysql.js');
-
+const passport = require('passport');
 const express = require('express');
 const cors = require('cors');
 
@@ -79,17 +79,13 @@ class DailyTodos {
   }
 }
 
+router.get('/:date', passport.authenticate('jwt', {session: false}), DailyTodos.getDailyTodo);
 
-router.options('/', cors());
-router.options('/:date', cors());
+router.post('/', passport.authenticate('jwt', {session: false}), DailyTodos.insertDailyTodo);
 
-router.get('/:date', cors(), DailyTodos.getDailyTodo);
+router.put('/:date', passport.authenticate('jwt', {session: false}), DailyTodos.updateDailyTodo);
 
-router.post('/', cors(), DailyTodos.insertDailyTodo);
-
-router.put('/:date', cors(), DailyTodos.updateDailyTodo);
-
-router.delete('/:date', cors(), DailyTodos.deleteDailyTodo);
+router.delete('/:date', passport.authenticate('jwt', {session: false}), DailyTodos.deleteDailyTodo);
 
 
 module.exports = router;

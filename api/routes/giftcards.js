@@ -1,5 +1,5 @@
 const {pool} = require('../config/mysql.js');
-
+const passport = require('passport');
 const express = require('express');
 const cors = require('cors');
 
@@ -62,15 +62,12 @@ class Giftcard {
   }
 };
 
-router.options('/', cors());
-router.options('/:id', cors());
+router.get('/', passport.authenticate('jwt', {session: false}), Giftcard.getAllGiftcards);
+router.get('/:id', passport.authenticate('jwt', {session: false}), Giftcard.getSingleGiftcard);
 
-router.get('/', cors(), Giftcard.getAllGiftcards);
-router.get('/:id', cors(), Giftcard.getSingleGiftcard);
-
-router.post('/', cors(), Giftcard.insertGiftcard);
-router.delete('/:id', cors(), Giftcard.deleteGiftcard);
-router.put('/:id', cors(), Giftcard.updateGiftcard);
+router.post('/', passport.authenticate('jwt', {session: false}), Giftcard.insertGiftcard);
+router.delete('/:id', passport.authenticate('jwt', {session: false}), Giftcard.deleteGiftcard);
+router.put('/:id', passport.authenticate('jwt', {session: false}), Giftcard.updateGiftcard);
 
 
 module.exports = router;

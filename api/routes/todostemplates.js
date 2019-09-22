@@ -1,5 +1,5 @@
 const {pool} = require('../config/mysql.js');
-
+const passport = require('passport');
 const express = require('express');
 const cors = require('cors');
 const {getDayString} = require('../utility');
@@ -79,18 +79,14 @@ class TodosTemplates {
   }
 }
 
-router.options('/', cors());
-router.options('/:id', cors());
-router.options('/day/:day', cors());
+router.get('/', passport.authenticate('jwt', {session: false}), TodosTemplates.getAllTodosTemplates);
+router.get('/:id', passport.authenticate('jwt', {session: false}), TodosTemplates.getTodosTemplate);
+router.get('/day/:day', passport.authenticate('jwt', {session: false}), TodosTemplates.getDayTodosTemplates);
 
-router.get('/', cors(), TodosTemplates.getAllTodosTemplates);
-router.get('/:id', cors(), TodosTemplates.getTodosTemplate);
-router.get('/day/:day', cors(), TodosTemplates.getDayTodosTemplates);
+router.post('/', passport.authenticate('jwt', {session: false}), TodosTemplates.insertTodosTemplate);
 
-router.post('/', cors(), TodosTemplates.insertTodosTemplate);
+router.put('/:id', passport.authenticate('jwt', {session: false}), TodosTemplates.updateTodosTemplate);
 
-router.put('/:id', cors(), TodosTemplates.updateTodosTemplate);
-
-router.delete('/:id', cors(), TodosTemplates.deleteTodosTemplate);
+router.delete('/:id', passport.authenticate('jwt', {session: false}), TodosTemplates.deleteTodosTemplate);
 
 module.exports = router;

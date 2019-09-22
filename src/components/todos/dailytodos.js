@@ -18,7 +18,7 @@ class DailyTodos extends React.Component {
 
   handleClick = (todo) => {
     todo.completed = !todo.completed;
-    axios.put(`http://localhost:8080/api/todos/${todo.id}`, todo)
+    axios.put(`/api/todos/${todo.id}`, todo)
     .then((response) => {
       const todos = [...this.state.todos].map((t) => t = t.id === todo.id ? todo : t);
 
@@ -35,13 +35,13 @@ class DailyTodos extends React.Component {
   };
 
   handleTextSubmit = (e) => {
-    axios.put(`http://localhost:8080/api/daily-todos/${this.state.date}`, {message: this.state.dailyMessage})
+    axios.put(`/api/daily-todos/${this.state.date}`, {message: this.state.dailyMessage})
     .then((response) => console.log("success"))
     .catch((error) => console.log(error));
   };
 
   handleAdd = (template) => {
-    axios.post(`http://localhost:8080/api/todos-templates`, template)
+    axios.post(`/api/todos-templates`, template)
       .then((response) => this.refresh())
       .catch((error) => console.log(error));
   };
@@ -55,7 +55,7 @@ class DailyTodos extends React.Component {
 
   handleEdit = (form) =>  {
     console.log(form);
-    axios.put(`http://localhost:8080/api/todos-templates/${form.templateId || form.id}`, form)
+    axios.put(`/api/todos-templates/${form.templateId || form.id}`, form)
     .then((response) => {
       this.refresh();
     })
@@ -64,7 +64,7 @@ class DailyTodos extends React.Component {
 
   handleDelete = (form) =>  {
     console.log(form);
-    axios.delete(`http://localhost:8080/api/todos-templates/${form.templateId || form.id}`)
+    axios.delete(`/api/todos-templates/${form.templateId || form.id}`)
     .then((response) => {
       console.log(response);
       this.refresh();
@@ -82,7 +82,7 @@ class DailyTodos extends React.Component {
 
   refresh = () => {
     if (this.state.edit) {
-      axios.get(`http://localhost:8080/api/todos-templates`)
+      axios.get(`/api/todos-templates`)
       .then((response) => {
         this.setState({templates: response.data.res});
       })
@@ -90,17 +90,18 @@ class DailyTodos extends React.Component {
     } else {
       const today = new Date().toISOString().slice(0,10);
 
-      axios.get(`http://localhost:8080/api/daily-todos/${this.state.date}`).then((response) => {
+      axios.get(`/api/daily-todos/${this.state.date}`).then((response) => {
         this.setState({todos: response.data.res});
         this.setState({dailyMessage: response.data.dailyMessage || ""});
       }).catch((error) => {
+        if (error.response.status === 401) throw "Unauthorized";
         if (this.state.date !== today) {
           this.setState({todos: []});
           return;
         }
-        axios.post(`http://localhost:8080/api/daily-todos`, {dateCreated: this.state.date})
+        axios.post(`/api/daily-todos`, {dateCreated: this.state.date})
         .then((response) => {
-          axios.get(`http://localhost:8080/api/daily-todos/${this.state.date}`).then((response) => {
+          axios.get(`/api/daily-todos/${this.state.date}`).then((response) => {
             this.setState({todos: response.data.res});
             this.setState({dailyMessage: response.data.dailyMessage || ""});
           }).catch((error) => {

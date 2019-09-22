@@ -15,7 +15,7 @@ class GiftCards extends React.Component {
 
   handleAdd = (giftcard) => {
 
-    axios.post('http://localhost:8080/api/giftcards', giftcard)
+    axios.post('/api/giftcards', giftcard)
     .then((response) => {
       const giftcards = [...this.state.giftcards];
       giftcard.id = response.data.insertId;
@@ -31,7 +31,7 @@ class GiftCards extends React.Component {
   handleEdit = (giftcard) => {
     const giftcards = [...this.state.giftcards].map(g => g = g.id === giftcard.id ? giftcard : g);
 
-    axios.put(`http://localhost:8080/api/giftcards/${giftcard.id}`, giftcard)
+    axios.put(`/api/giftcards/${giftcard.id}`, giftcard)
     .then((response) => {
       this.setState({giftcards: giftcards});
     })
@@ -41,7 +41,7 @@ class GiftCards extends React.Component {
   }
 
   componentDidMount() {
-    axios.get('http://localhost:8080/api/giftcards').then((response) => {
+    axios.get('/api/giftcards').then((response) => {
       // console.log(response);
       this.setState({giftcards: response.data.res});
     });

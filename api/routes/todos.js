@@ -1,5 +1,5 @@
 const {pool} = require('../config/mysql.js');
-
+const passport = require('passport');
 const express = require('express');
 const cors = require('cors');
 
@@ -19,9 +19,6 @@ class Todos {
   }
 }
 
-router.options('/', cors());
-router.options('/:id', cors());
-
-router.put('/:id', cors(), Todos.updateTodo);
+router.put('/:id', passport.authenticate('jwt', {session: false}), Todos.updateTodo);
 
 module.exports = router;
