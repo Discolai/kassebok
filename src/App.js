@@ -6,6 +6,7 @@ import '../node_modules/font-awesome/css/font-awesome.min.css';
 import GiftCards from './components/giftcards/giftcards';
 import Posts from './components/posts/posts';
 import DailyTodos from './components/todos/dailytodos';
+import Login from './components/users/login';
 
 const notFound = () =>  {
   return (
@@ -18,6 +19,7 @@ class App extends React.Component {
     return (
       <Router>
           <Switch>
+            <Route exact path="/" component={Login}/>
             <Route exact path="/giftcards" component={GiftCards}/>
             <Route exact path="/posts" component={Posts}/>
             <Route exact path="/daily-todos" component={DailyTodos}/>
