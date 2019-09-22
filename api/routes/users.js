@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt');
 const validator = require('email-validator');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 
 const {JWT_EXPIRATION_MIN, JWT_EXPIRATION_MS, secret} = require('../config/serverconf');
 
@@ -85,17 +86,15 @@ class Users {
       if (result) {
         const payload = {
           sub: result.insertId,
-          userName: req.user.userName,
-          email: req.user.email,
+          csrfToken: crypto.randomBytes(48).toString("hex"),
           exp: Date.now() + JWT_EXPIRATION_MS
         };
         jwt.sign(payload, secret, (err, token) => {
           if (err) {
             res.status(500).send(err);
           } else {
-            // res.setHeader('Authorization', 'Bearer ' + token);
-            res.cookie('jwt', token, {httpOnly: true, secure: true});
-            res.send();
+            res.cookie('jwt', token, {httpOnly: true, secure: false});
+            res.send({userName: req.user.userName, csrfToken: payload.csrfToken});
           }
         });
       }
@@ -104,6 +103,10 @@ class Users {
   }
 
   static logoutUser(req, res) {
+    if (req.headers["x-csrf-token"] !== req.user.csrfToken) {
+      res.status(401).send({err: "Invalid x-csrf-token"});
+    }
+
     pool.execute(`DELETE FROM Tokens WHERE id=?;`, [req.user.sub])
     .then(([result, fields]) => {
       res.status(result.affectedRows > 0 ? 204 : 400).send();
@@ -112,15 +115,9 @@ class Users {
   }
 }
 
-
-router.options('/register', cors());
-router.options('/delete', cors());
-router.options('/login', cors());
-router.options('/logout', cors());
-
-router.post('/register', cors(), Users.insertUser);
-router.post('/delete', passport.authenticate('local', {session: false}), cors(), Users.deleteUser);
-router.post('/login', passport.authenticate('local', {session: false}), cors(), Users.loginUser);
-router.post('/logout', passport.authenticate('jwt', {session: false}), cors(), Users.logoutUser);
+router.post('/register', Users.insertUser);
+router.post('/delete', passport.authenticate('local', {session: false}), Users.deleteUser);
+router.post('/login', passport.authenticate('local', {session: false}), Users.loginUser);
+router.post('/logout', passport.authenticate('jwt', {session: false}), Users.logoutUser);
 
 module.exports = router;
