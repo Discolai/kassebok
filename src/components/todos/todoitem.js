@@ -32,7 +32,7 @@ class TodoItem extends React.Component {
               </button>
             </TodosTemplateForm>
             <AcceptPopup
-              modalHdr="Are you sure you want to delete?"
+              modalHdr="Are you sure you want to delete this todo template?"
               onAccept={this.props.onDelete}
               payload={this.props.todo}
               role="Delete"
