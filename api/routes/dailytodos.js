@@ -28,31 +28,38 @@ class DailyTodos {
   }
 
   static insertDailyTodo(req, res)  {
-    const {dateCreated, message} = req.body;
-    const dateObj = new Date(dateCreated)
+    const {message} = req.body;
+    const dateCreated = req.params.date;
+    const dateObj = new Date(dateCreated);
 
-    // Array of applicable days
-    const days = [0, 0, 0, 0, 0, 0];
-    days[dateObj.getDay()] = 1;
+    // Sunday
+    if (dateObj.getDay() === 0) {
+      res.status(400).send({err: "Sunday is not applicable!"});
+    } else {
+      // Array of applicable days
+      const days = [0, 0, 0, 0, 0, 0];
+      days[dateObj.getDay() - 1] = 1;
 
-    pool.execute(
-      `INSERT INTO DailyTodos
-      (day, dateCreated, message) VALUES (?, ?, ?);`,
-      [getDayString(dateObj), dateCreated, message || ""])
-      .then(([result, fields]) => {
-        pool.execute(
-          `INSERT INTO Todos
-          (dayRef, template)
-          SELECT ?, id FROM TodosTemplates WHERE
-          monday=? OR tuesday=? OR wednesday=?
-          OR thursday=? OR friday=? OR saturday=?;`,
-          [result.insertId, ...days])
-          .then(() => {
-            res.status(result.affectedRows > 0 ? 200 : 400).send({insertId: result.insertId});
+      pool.execute(
+        `INSERT INTO DailyTodos
+        (monday, tuesday, wednesday, thursday, friday, saturday, dateCreated, message)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?);`,
+        [...days, dateCreated, message || ""])
+        .then(([result, fields]) => {
+          pool.execute(
+            `INSERT INTO Todos
+            (dayRef, template)
+            SELECT ?, id FROM TodosTemplates WHERE
+            monday=? OR tuesday=? OR wednesday=?
+            OR thursday=? OR friday=? OR saturday=?;`,
+            [result.insertId, ...days])
+            .then(() => {
+              res.status(result.affectedRows > 0 ? 200 : 400).send({insertId: result.insertId});
+            })
+            .catch((err) => res.status(500).send({err: err}));
           })
           .catch((err) => res.status(500).send({err: err}));
-      })
-      .catch((err) => res.status(500).send({err: err}));
+    }
   }
 
   static updateDailyTodo(req, res)  {
@@ -81,7 +88,7 @@ class DailyTodos {
 
 router.get('/:date', passport.authenticate('jwt', {session: false}), DailyTodos.getDailyTodo);
 
-router.post('/', passport.authenticate('jwt', {session: false}), DailyTodos.insertDailyTodo);
+router.post('/:date', passport.authenticate('jwt', {session: false}), DailyTodos.insertDailyTodo);
 
 router.put('/:date', passport.authenticate('jwt', {session: false}), DailyTodos.updateDailyTodo);
 

@@ -33,7 +33,12 @@ CREATE TABLE IF NOT EXISTS TodosTemplates (
 CREATE TABLE IF NOT EXISTS DailyTodos  (
   id INT(6) UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,
   dateCreated DATE NOT NULL UNIQUE,
-  day ENUM ('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'),
+  monday TINYINT(1) NOT NULL,
+  tuesday TINYINT(1) NOT NULL,
+  wednesday TINYINT(1) NOT NULL,
+  thursday TINYINT(1) NOT NULL,
+  friday TINYINT(1) NOT NULL,
+  saturday TINYINT(1) NOT NULL,
   message TEXT
 );
 
