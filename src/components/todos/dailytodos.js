@@ -5,6 +5,7 @@ import NavBar from '../navbar';
 import TodoItem from './todoitem';
 import TemplateItem from './templates/templateitem'
 import TodosTemplateForm from './templates/templateform'
+import {getCsrfToken} from '../../utility'
 
 class DailyTodos extends React.Component {
   state = {
@@ -18,7 +19,7 @@ class DailyTodos extends React.Component {
 
   handleClick = (todo) => {
     todo.completed = !todo.completed;
-    axios.put(`/api/todos/${todo.id}`, todo)
+    axios.put(`/api/todos/${todo.id}`, todo, {headers: {"x-csrf-token": getCsrfToken()}})
     .then((response) => {
       const todos = [...this.state.todos].map((t) => t = t.id === todo.id ? todo : t);
 
@@ -35,13 +36,13 @@ class DailyTodos extends React.Component {
   };
 
   handleTextSubmit = (e) => {
-    axios.put(`/api/daily-todos/${this.state.date}`, {message: this.state.dailyMessage})
+    axios.put(`/api/daily-todos/${this.state.date}`, {message: this.state.dailyMessage}, {headers: {"x-csrf-token": getCsrfToken()}})
     .then((response) => console.log("success"))
     .catch((error) => console.log(error));
   };
 
   handleAdd = (template) => {
-    axios.post(`/api/todos-templates`, template)
+    axios.post(`/api/todos-templates`, template, {headers: {"x-csrf-token": getCsrfToken()}})
       .then((response) => this.refresh())
       .catch((error) => console.log(error));
   };
@@ -54,7 +55,7 @@ class DailyTodos extends React.Component {
   };
 
   handleEdit = (template) =>  {
-    axios.put(`/api/todos-templates/${template.templateId || template.id}`, template)
+    axios.put(`/api/todos-templates/${template.templateId || template.id}`, template, {headers: {"x-csrf-token": getCsrfToken()}})
     .then((response) => {
       const templates = [...this.state.templates].map(t => t = t.id === template.id ? template : t);
       this.setState({templates: templates});
@@ -63,7 +64,7 @@ class DailyTodos extends React.Component {
   };
 
   handleDelete = (template) =>  {
-    axios.delete(`/api/todos-templates/${template.templateId || template.id}`)
+    axios.delete(`/api/todos-templates/${template.templateId || template.id}`, {headers: {"x-csrf-token": getCsrfToken()}})
     .then((response) => {
       this.setState({todos: this.state.todos.filter((t) => t.templateId !== template.id)});
       this.setState({templates: this.state.templates.filter((t) => t.id !== template.id)});
@@ -97,7 +98,7 @@ class DailyTodos extends React.Component {
           this.setState({todos: []});
           return;
         }
-        axios.post(`/api/daily-todos`, {dateCreated: this.state.date})
+        axios.post(`/api/daily-todos`, {dateCreated: this.state.date}, {headers: {"x-csrf-token": getCsrfToken()}})
         .then((response) => {
           axios.get(`/api/daily-todos/${this.state.date}`).then((response) => {
             this.setState({todos: response.data.res});

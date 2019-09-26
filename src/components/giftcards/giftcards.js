@@ -4,7 +4,7 @@ import axios from 'axios';
 import NavBar from '../navbar';
 import GiftCardItem from './giftcarditem';
 import GiftCardForm from './giftcardform';
-
+import {getCsrfToken} from '../../utility';
 
 class GiftCards extends React.Component {
   state = {
@@ -37,7 +37,7 @@ class GiftCards extends React.Component {
 
 
   handleAdd = (giftcard) => {
-    axios.post('/api/giftcards', giftcard)
+    axios.post('/api/giftcards', giftcard, {headers: {"x-csrf-token": getCsrfToken()}})
     .then((response) => {
       const giftcards = [...this.state.giftcards];
       giftcard.id = response.data.insertId;
@@ -50,7 +50,7 @@ class GiftCards extends React.Component {
   }
 
   handleEdit = (giftcard) => {
-    axios.put(`/api/giftcards/${giftcard.id}`, giftcard)
+    axios.put(`/api/giftcards/${giftcard.id}`, giftcard, {headers: {"x-csrf-token": getCsrfToken()}})
     .then((response) => {
       const giftcards = [...this.state.giftcards].map(g => g = g.id === giftcard.id ? giftcard : g);
       this.setState({giftcards: giftcards});
@@ -60,7 +60,7 @@ class GiftCards extends React.Component {
   }
 
   handleDelete = (giftcard) =>  {
-    axios.delete(`/api/giftcards/${giftcard.id}`)
+    axios.delete(`/api/giftcards/${giftcard.id}`, "", {headers: {"x-csrf-token": getCsrfToken()}})
     .then((response) => {
       this.setState({giftcards: this.state.giftcards.filter((g) => g.id !== giftcard.id)});
       this.setState({success: "Deleted giftcard succesfully!", danger: undefined, warning: undefined});

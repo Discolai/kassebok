@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import axios from 'axios'
-
+import {getCsrfToken} from '../../utility';
 
 class Login extends React.Component {
 
@@ -17,11 +17,8 @@ class Login extends React.Component {
       withCredentials: true,
       nameEmail: this.state.user,
       password: this.state.password
-     })
+    })
       .then((res) =>  {
-        localStorage.setItem("userName", res.data.userName);
-        localStorage.setItem("csrfToken", res.data.csrfToken);
-        console.log(localStorage.getItem("csrfToken"));
         this.props.history.push("/giftcards");
       })
       .catch((err) => {
@@ -30,7 +27,7 @@ class Login extends React.Component {
   };
 
   handleLogout = (e) => {
-    axios.post(`/api/users/logout`, "", {headers: {"x-csrf-token": localStorage.getItem("csrfToken")}})
+    axios.post(`/api/users/logout`, "", {headers: {"x-csrf-token": getCsrfToken()}})
     .then((res) =>  {
       console.log(res);
     }).catch((err) => {
@@ -45,16 +42,30 @@ class Login extends React.Component {
 
   render () {
     return (
-      <div className="container">
+      <div className="d-flex justify-content-center" style={{paddingTop: "200px"}}>
         <form onSubmit={this.handleLogin}>
-          <input className="form-control" name="user" type="email" onChange={this.handleChange}
-            value={this.state.user}/>
-          <input className="form-control" name="password" type="password" onChange={this.handleChange}
-            value={this.state.password}/>
-          <button className="btn btn-primary" type="submit">Submit</button>
+          <img src="https://image.shutterstock.com/image-vector/user-icon-trendy-flat-style-600w-418179865.jpg"
+            className="mb-4" width="250px"
+          />
+        <h2>Sign in</h2>
+          <div className="form-group">
+            <input
+              className="form-control"
+              name="user" type="text"
+              onChange={this.handleChange}
+              placeholder="Username/Email"
+              required
+              autoFocus
+              value={this.state.user}/>
+            <input
+              className="form-control"
+              name="password" type="password"
+              onChange={this.handleChange}
+              placeholder="Password"
+              value={this.state.password}/>
+          </div>
+          <button className="btn btn-primary" type="submit">Login</button>
         </form>
-        <br/>
-        <button onClick={this.handleLogout} className="btn btn-primary">Log out</button>
       </div>
     );
   }
