@@ -28,12 +28,12 @@ const localStrategy = new LocalStrategy({
 );
 
 const jwtStrategy = new JwtStrategy({
-  // jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  jwtFromRequest: req => req.cookies.jwt,
+  jwtFromRequest: (req) =>  {
+    return req.cookies.jwt01 + "." + req.cookies.jwt2;
+  },
   secretOrKey: secret
   },
   (jwtPayload, done) => {
-    // TODO: Check against database
     if (Date.now() > jwtPayload.exp) {
       return done(null, false, 'jwt expired');
     } else {

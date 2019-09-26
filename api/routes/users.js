@@ -58,7 +58,6 @@ class Users {
             VALUES (?, ?, ?);`,
             [email, userName, hash])
           .then(([rows, fields]) =>  {
-            console.log(rows);
             res.send({insertId: rows.insertId});
           })
           .catch((err) => res.status(500).send({err: err.code}));
@@ -86,14 +85,17 @@ class Users {
       if (result) {
         const payload = {
           sub: result.insertId,
-          csrfToken: crypto.randomBytes(48).toString("hex"),
+          _csrf: crypto.randomBytes(32).toString("hex"),
           exp: Date.now() + JWT_EXPIRATION_MS
         };
         jwt.sign(payload, secret, (err, token) => {
           if (err) {
             res.status(500).send(err);
           } else {
-            res.cookie('jwt', token, {httpOnly: true, secure: false});
+            const splitToken = token.split(".")
+            // res.cookie('jwt', token, {httpOnly: true, secure: false});
+            res.cookie('jwt01', splitToken[0] + "." + splitToken[1], {httpOnly: false, secure: false});
+            res.cookie('jwt2', splitToken[2], {httpOnly: true, secure: false});
             res.send({userName: req.user.userName, csrfToken: payload.csrfToken});
           }
         });
