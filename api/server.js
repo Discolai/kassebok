@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const passport = require('passport');
+const csrfValidator = require('./middleware/csrfvalidator');
 
 const {localStrategy, jwtStrategy} = require('./config/passport');
 passport.use(localStrategy);
@@ -12,10 +13,11 @@ const PORT = process.env.PORT || 8080;
 
 const app = express();
 
+app.use(morgan('combined'));
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use(morgan('combined'));
 app.use(passport.initialize());
+app.use(csrfValidator);
 
 app.use('/api/giftcards', require('./routes/giftcards'));
 app.use('/api/daily-todos', require('./routes/dailytodos'));

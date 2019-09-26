@@ -1,3 +1,5 @@
+const atob = require('atob');
+
 function getDayString(date)  {
   switch (date.getDay()) {
     case 0:
@@ -19,4 +21,8 @@ function getDayString(date)  {
   }
 }
 
-module.exports = {getDayString};
+function getCsrfToken(cookie) {
+  return JSON.parse(atob(cookie.split(".")[1]))._csrf;
+}
+
+module.exports = {getDayString, getCsrfToken};
