@@ -98,7 +98,7 @@ class DailyTodos extends React.Component {
           this.setState({todos: []});
           return;
         }
-        axios.post(`/api/daily-todos`, {dateCreated: this.state.date}, {headers: {"x-csrf-token": getCsrfToken()}})
+        axios.post(`/api/daily-todos/${this.state.date}`, "", {headers: {"x-csrf-token": getCsrfToken()}})
         .then((response) => {
           axios.get(`/api/daily-todos/${this.state.date}`).then((response) => {
             this.setState({todos: response.data.res});
